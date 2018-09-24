@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/ic_settings"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="Settings">
+    </item>
+
+    <item
+        android:id="@+id/ic_time_list"
+        android:icon="@drawable/ic_format_list_bulleted_black_24dp"
+        android:title="Time-List">
+    </item>
+
+    <item
+        android:id="@+id/ic_timer"
+        android:icon="@drawable/ic_timer_black_24dp"
+        android:title="Timer">
+    </item>
+
+    <item
+        android:id="@+id/ic_statistics"
+        android:icon="@drawable/ic_show_chart_black_24dp"
+        android:title="Statistics">
+    </item>
+
+    <item
+        android:id="@+id/ic_about"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="About">
+    </item>
+</menu>

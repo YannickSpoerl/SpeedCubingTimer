@@ -7,55 +7,47 @@
     android:layout_height="match_parent"
     tools:context=".Timer">
 
-    <android.support.design.widget.AppBarLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:id="@+id/relLayout">
 
-        <android.support.v7.widget.Toolbar
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbarTop"
-            android:background="@drawable/white_grey_border_bottom">
+            android:layout_height="match_parent"
+            android:id="@+id/relLayoutMiddle"
+            android:layout_alignParentTop="true">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="224dp"
+                android:text="Timer" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/relLayoutBottomBar"
+            android:layout_alignParentBottom="true">
+
+            <android.support.design.widget.BottomNavigationView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:weightSum="100"
-                android:orientation="horizontal">
+                android:id="@+id/bottomNavView_Bar"
+                android:background="@drawable/white_grey_border_bottom"
+                app:menu="@menu/bottom_navigation_menu">
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="20"
-                    android:src="@drawable/ic_settings_black_24dp"/>
+            </android.support.design.widget.BottomNavigationView>
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="20"
-                    android:src="@drawable/ic_format_list_bulleted_black_24dp"/>
+        </RelativeLayout>
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="20"
-                    android:src="@drawable/ic_timer_black_24dp"/>
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="20"
-                    android:src="@drawable/ic_show_chart_black_24dp"/>
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="20"
-                    android:src="@drawable/ic_info_black_24dp"/>
+    </RelativeLayout>
 
-            </LinearLayout>
-
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
 
 </android.support.design.widget.CoordinatorLayout>
