@@ -24,41 +24,21 @@ import java.util.Calendar;
 
 public class Timer extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    // Settings
     boolean inspection_enabled = true;
     boolean timer_visible = true;
 
-    /* Puzzle-IDs
-    0 THREE_BY_THREE
-    1 FOUR_BY_FOUR
-    2 FIVE_BY_FIVE,
-    3 TWO_BY_TWO,
-    4 THREE_BY_THREE_BLD,
-    5 THREE_BY_THREE_OH,
-    6 THREE_BY_THREE_FM,
-    7 THREE_BY_THREE_FT,
-    8 MEGAMINX,
-    9 PYRAMINX,
-    10 SQ1,
-    11 CLOCK,
-    12 SKEWB,
-    13 SIX_BY_SIX,
-    14 SEVEN_BY_SEVEN,
-    15 FOUR_BY_FOUR_BLD,
-    16 FIVE_BY_FIVE_BLD,
-    17 THREE_BY_THREE_MBLD;*/
-
     private int selectedpuzzleID = 0;
-    boolean timer_running = false, inspection_running = false;
-    private CountDownTimer inspectiontimer;
+    boolean timer_running = false;
+    boolean inspection_running = false;
     private long inspectiontimeleft = 15000;
-    Button startstopbutton;
-    TextView statustextview;
-    Handler timeHandler = new Handler();
-    long startTime = 0L, timeInMilliseconds = 0L, timeSwapBuff = 0L, updateTime = 0L;
-    long finalminutes, finalseconds, finalmilliseconds;
-    Database database;
+    private long startTime = 0L, timeInMilliseconds = 0L, timeSwapBuff = 0L, updateTime = 0L;
+    private long finalminutes = 0L, finalseconds = 0L, finalmilliseconds = 0L;
 
+    private CountDownTimer inspectiontimer;
+    private Database database;
+    private Button startstopbutton;
+    private TextView statustextview;
+    private Handler timeHandler = new Handler();
 
     Runnable updateTimerThread = new Runnable() {
         @Override
@@ -84,13 +64,17 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
+
         startstopbutton = (Button) findViewById(R.id.startstopbutton);
         statustextview = (TextView) findViewById(R.id.status_textview);
         Spinner puzzleSpinner = (Spinner) findViewById(R.id.puzzle_spinner);
         database = new Database(this);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.puzzles, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         puzzleSpinner.setAdapter(adapter);
+
+        //Bottom Menu
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
@@ -211,6 +195,10 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         Calendar c = Calendar.getInstance();
         TimeObject newTime = new TimeObject(finalminutes,finalseconds,finalmilliseconds,selectedpuzzleID,
                 c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH)+1, c.get(Calendar.YEAR));
+        saveTime(newTime);
+    }
+
+    public void saveTime(TimeObject newTime){
         boolean addTime = database.addData(newTime);
         if(!addTime){
             Toast.makeText(this,"Couldnt save time", Toast.LENGTH_LONG).show();

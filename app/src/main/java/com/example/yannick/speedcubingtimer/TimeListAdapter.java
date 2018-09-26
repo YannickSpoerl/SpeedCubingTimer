@@ -1,7 +1,6 @@
 package com.example.yannick.speedcubingtimer;
 
 import android.content.Context;
-import android.support.annotation.AnimatorRes;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+// this class is responsible for building the ListView in the Time_List activity
 public class TimeListAdapter extends ArrayAdapter<TimeObject> {
+
     private Context context;
     int resource;
     private int lastPosition = -1;
@@ -86,11 +87,10 @@ public class TimeListAdapter extends ArrayAdapter<TimeObject> {
            holder = (ViewHolder) convertView.getTag();
            result = convertView;
         }
-
+        // scrolling animation when loading items further up or down
         Animation animation = AnimationUtils.loadAnimation(context, (position > lastPosition) ? R.anim.loading_down_anim : R.anim.loading_up_anim);
         result.startAnimation(animation);
         lastPosition = position;
-
         holder.time.setText(timeString);
         holder.date.setText(dateString);
         holder.puzzle.setText(puzzlestring);

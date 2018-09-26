@@ -16,6 +16,35 @@ public class TimeObject {
         this.year = year;
     }
 
+    public String toString(){
+        String time_string = "";
+        if(minutes < 10){
+            time_string += "0";
+        }
+        time_string += minutes + ":";
+        if(seconds < 10){
+            time_string += "0";
+        }
+        time_string += seconds + ".";
+        if(milliseconds < 10){
+            time_string += "00";
+        }
+        else if(milliseconds < 100){
+            time_string += "0";
+        }
+        time_string += String.valueOf(milliseconds).substring(0,3);
+        String date_string = "";
+        if(day < 10){
+            date_string += "0";
+        }
+        date_string += day + ".";
+        if(month < 10){
+            date_string += "0";
+        }
+        date_string += month + "." + year;
+        return this.getPuzzleString() + ", " + time_string + " from " + date_string;
+    }
+
     public long getMinutes() {
         return minutes;
     }

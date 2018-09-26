@@ -1,10 +1,11 @@
 package com.example.yannick.speedcubingtimer;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,11 +19,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class Time_List extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-    private final static String TAG = "TimeListActivity";
     Database database;
     ListView timelist;
     private int selectedPuzzleID;
@@ -37,14 +38,13 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
         puzzleSpinner.setAdapter(adapter);
         timelist = (ListView) findViewById(R.id.timeList);
         database = new Database(this);
+
+        //Bottom Menu
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
-
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
-
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -78,33 +78,47 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
     }
 
     private void populateListView(){
+        // Load all selected Time-Objects into ListView
         ArrayList<TimeObject> listData = new ArrayList<>();
-        TimeObject t1 = new TimeObject(1,12,12124,0,26,9,2018);
-        TimeObject t2 = new TimeObject(0,2,142,1,26,9,2018);
-        TimeObject t3 = new TimeObject(12,0,0,2,0,7,2018);
-        TimeObject t4 = new TimeObject(1,12,1224,2,26,12,2008);
-        TimeObject t5 = new TimeObject(1,12,1224,2,26,12,2008);
-
-        listData.add(t1);
-        listData.add(t2);
-        listData.add(t3);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-        listData.add(t4);
-
-        ListAdapter adapter = new TimeListAdapter(this,R.layout.adapter_view_layout,listData);
+        Cursor cursor = database.getData(selectedPuzzleID);
+        while(cursor.moveToNext()){
+            int puzzleID = cursor.getInt(cursor.getColumnIndex(Database.COL0));
+            long minutes = cursor.getLong(cursor.getColumnIndex(Database.COL1));
+            long seconds = cursor.getLong(cursor.getColumnIndex(Database.COL2));
+            long milliseconds = cursor.getLong(cursor.getColumnIndex(Database.COL3));
+            int day = cursor.getInt(cursor.getColumnIndex(Database.COL4));
+            int month = cursor.getInt(cursor.getColumnIndex(Database.COL5));
+            int year = cursor.getInt(cursor.getColumnIndex(Database.COL6));
+            listData.add(new TimeObject(minutes, seconds, milliseconds, puzzleID, day, month, year));
+        }
+        final ListAdapter adapter = new TimeListAdapter(this,R.layout.adapter_view_layout,listData);
         timelist.setAdapter(adapter);
+
+        timelist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                final TimeObject clickedTime = (TimeObject) adapterView.getItemAtPosition(position);
+                AlertDialog.Builder deleteAlert = new AlertDialog.Builder(Time_List.this);
+                deleteAlert.setTitle("Delete Time?");
+                deleteAlert.setMessage("You are about to delete " + clickedTime.toString() + "\n Are you sure?");
+                deleteAlert.setPositiveButton("Yes, delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        database.deleteData(clickedTime);
+                        populateListView();
+                        Toast.makeText(Time_List.this, "Deleted selected time", Toast.LENGTH_LONG).show();
+                    }
+                });
+                deleteAlert.setNegativeButton("No, don't delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(Time_List.this, "No time deleted", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                deleteAlert.create().show();
+            }
+        });
     }
 
     @Override
@@ -114,7 +128,7 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
         if(position == 0){
-            selectedPuzzleID = 18;
+            selectedPuzzleID = 18; // means all puzzle types are selected
         }
         else {
             selectedPuzzleID = position - 1;
