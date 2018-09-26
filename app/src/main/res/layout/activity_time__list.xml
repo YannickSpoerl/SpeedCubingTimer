@@ -17,9 +17,17 @@
             android:id="@+id/relLayoutMiddle"
             android:layout_alignParentTop="true">
 
+            <Spinner
+                android:id="@+id/puzzle_spinner_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_alignParentLeft="true"></Spinner>
+
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@+id/puzzle_spinner_list"
                 android:id="@+id/timeList"></ListView>
 
         </RelativeLayout>

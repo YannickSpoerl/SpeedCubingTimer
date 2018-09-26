@@ -45,11 +45,10 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
     13 SIX_BY_SIX,
     14 SEVEN_BY_SEVEN,
     15 FOUR_BY_FOUR_BLD,
-    16FIVE_BY_FIVE_BLD,
+    16 FIVE_BY_FIVE_BLD,
     17 THREE_BY_THREE_MBLD;*/
 
     private int selectedpuzzleID = 0;
-
     boolean timer_running = false, inspection_running = false;
     private CountDownTimer inspectiontimer;
     private long inspectiontimeleft = 15000;
@@ -224,7 +223,7 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-
+        selectedpuzzleID = position;
     }
 
     @Override

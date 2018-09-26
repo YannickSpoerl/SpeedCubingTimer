@@ -43,4 +43,53 @@ public class TimeObject {
     public int getPuzzleID() {
         return puzzleID;
     }
+
+    public String getPuzzleString(){
+        return getPuzzleByID(this.puzzleID);
+    }
+
+    public static String getPuzzleByID(int id){
+        switch(id){
+            case 0:
+                return "3x3";
+            case 1:
+                return "4x4";
+            case 2:
+                return "5x5";
+            case 3:
+                return "2x2";
+            case 4:
+                return "3x3 BLD";
+            case 5:
+                return "3x3 OH";
+            case 6:
+                return "3x3 FM";
+            case 7:
+                return "3x3 FT";
+            case 8:
+                return "Megaminx";
+            case 9:
+                return "Pyraminx";
+            case 10:
+                return "Square-1";
+            case 11:
+                return "Clock";
+            case 12:
+                return "Skewb";
+            case 13:
+                return "6x6";
+            case 14:
+                return "7x7";
+            case 15:
+                return "4x4 BLD";
+            case 16:
+                return "5x5 BLD";
+            case 17:
+                return "3x3 MBLD";
+        }
+
+        return "Not a puzzle";
+    }
+
+
 }
