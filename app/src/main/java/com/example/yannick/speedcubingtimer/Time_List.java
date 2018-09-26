@@ -2,19 +2,32 @@ package com.example.yannick.speedcubingtimer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class Time_List extends AppCompatActivity {
+
+    private final static String TAG = "TimeListActivity";
+    Database database;
+    ListView timelist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time__list);
+        timelist = (ListView) findViewById(R.id.timeList);
+        database = new Database(this);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
@@ -50,6 +63,19 @@ public class Time_List extends AppCompatActivity {
                 return false;
             }
         });
+
+        populateListView();
+    }
+
+    private void populateListView(){
+        Log.d(TAG, "populateListView: Displaying data in the ListView.");
+        Cursor data = database.getData();
+        ArrayList<String> listData = new ArrayList<>();
+        while(data.moveToNext()){
+            listData.add(data.getString(0));
+        }
+        ListAdapter adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,listData);
+        timelist.setAdapter(adapter);
     }
 
     @Override
