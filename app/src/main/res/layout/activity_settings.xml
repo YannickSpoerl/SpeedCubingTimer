@@ -17,14 +17,52 @@
             android:id="@+id/relLayoutMiddle"
             android:layout_alignParentTop="true">
 
-            <TextView
-                android:id="@+id/textView"
+            <CheckBox
+                android:id="@+id/inspectionEnabledCheckbox"
+                android:layout_width="wrap_content"
+                android:checked="true"
+                android:layout_height="wrap_content"
+                android:text="15 sec Inspection"
+                android:textSize="20sp"
+                android:layout_alignParentStart="true"
+                android:layout_margin="10dp"/>
+
+            <CheckBox
+                android:id="@+id/timeVisibleCheckbox"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="224dp"
-                android:text="Settings" />
+                android:layout_margin="10dp"
+                android:textSize="20sp"
+                android:layout_below="@+id/inspectionEnabledCheckbox"
+                android:text="Show time while timing"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="70dp"
+                android:layout_centerHorizontal="true">
+
+                <Button
+                    android:id="@+id/resetButton"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorLightGrey"
+                    android:layout_margin="20dp"
+                    android:text="Reset all Times" />
+
+                <Button
+                    android:id="@+id/exportDataButton"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorLightGrey"
+                    android:layout_margin="20dp"
+                    android:layout_alignParentRight="true"
+                    android:text="Export Times" />
+
+            </RelativeLayout>
+
         </RelativeLayout>
 
         <RelativeLayout

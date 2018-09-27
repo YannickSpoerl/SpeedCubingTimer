@@ -61,16 +61,27 @@ public class Database extends SQLiteOpenHelper {
         return true;
     }
 
-    Cursor getData(int selectedPuzzleID){
+    Cursor getData(int selectedPuzzleID, int selectedSortBy){
+        String orderBy = " ORDER BY ID DESC";
+        switch (selectedSortBy){
+            case 1:
+                orderBy = " ORDER BY ID ASC";
+                break;
+            case 2:
+                orderBy = " ORDER BY " + COL1 + " ASC, " + COL2 + " ASC, " + COL3 + " ASC";
+                break;
+            case 3:
+                orderBy = " ORDER BY " + COL1 + " DESC, " + COL2 + " DESC, " + COL3 + " DESC";
+        }
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         String query;
         // return all saved time, id = 18 equals all puzzles selected
         if(selectedPuzzleID == 18) {
-            query = "SELECT * FROM " + TABLE_NAME;
+            query = "SELECT * FROM " + TABLE_NAME + orderBy;
         }
         // return just the times associated with the selected puzzle
         else{
-            query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL0 + " = " + selectedPuzzleID;
+            query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL0 + " = " + selectedPuzzleID + orderBy;
         }
         return sqLiteDatabase.rawQuery(query, null);
     }

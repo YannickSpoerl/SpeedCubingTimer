@@ -119,6 +119,4 @@ public class TimeObject {
 
         return "Not a puzzle";
     }
-
-
 }

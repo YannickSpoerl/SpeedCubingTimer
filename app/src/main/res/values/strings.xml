@@ -43,4 +43,11 @@
         <item>5x5 BLD</item>
         <item>3x3 MBLD</item>
     </string-array>
+
+    <string-array name="sortBySpinnerArray">
+        <item>latest</item>
+        <item>oldest</item>
+        <item>fastest</item>
+        <item>slowest</item>
+    </string-array>
 </resources>

@@ -8,7 +8,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,24 +18,33 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Time_List extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     Database database;
-    ListView timelist;
+    ListView timeListListView;
     private int selectedPuzzleID;
+    private int selectedSortBy = 0; // 0 = latest, 1 = oldest, 2 = fastest, 3 = slowest
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time__list);
+
         Spinner puzzleSpinner = (Spinner) findViewById(R.id.puzzle_spinner_list);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.puzzles_list, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        puzzleSpinner.setAdapter(adapter);
-        timelist = (ListView) findViewById(R.id.timeList);
+        ArrayAdapter<CharSequence> puzzleSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.puzzles_list, android.R.layout.simple_spinner_item);
+        puzzleSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        puzzleSpinner.setAdapter(puzzleSpinnerAdapter);
+
+        Spinner sortBySpinner = (Spinner) findViewById(R.id.sortby_spinner);
+        ArrayAdapter<CharSequence> sortBySpinnerAdapter = ArrayAdapter.createFromResource(this,R.array.sortBySpinnerArray, android.R.layout.simple_spinner_item);
+        sortBySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortBySpinner.setAdapter(sortBySpinnerAdapter);
+
+        timeListListView = (ListView) findViewById(R.id.timeList);
         database = new Database(this);
 
         //Bottom Menu
@@ -74,13 +82,14 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
         });
 
         puzzleSpinner.setOnItemSelectedListener(this);
+        sortBySpinner.setOnItemSelectedListener(this);
         populateListView();
     }
 
     private void populateListView(){
         // Load all selected Time-Objects into ListView
-        ArrayList<TimeObject> listData = new ArrayList<>();
-        Cursor cursor = database.getData(selectedPuzzleID);
+        ArrayList<TimeObject> timeListArray = new ArrayList<>();
+        Cursor cursor = database.getData(selectedPuzzleID, selectedSortBy);
         while(cursor.moveToNext()){
             int puzzleID = cursor.getInt(cursor.getColumnIndex(Database.COL0));
             long minutes = cursor.getLong(cursor.getColumnIndex(Database.COL1));
@@ -89,12 +98,11 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
             int day = cursor.getInt(cursor.getColumnIndex(Database.COL4));
             int month = cursor.getInt(cursor.getColumnIndex(Database.COL5));
             int year = cursor.getInt(cursor.getColumnIndex(Database.COL6));
-            listData.add(new TimeObject(minutes, seconds, milliseconds, puzzleID, day, month, year));
+            timeListArray.add(new TimeObject(minutes, seconds, milliseconds, puzzleID, day, month, year));
         }
-        final ListAdapter adapter = new TimeListAdapter(this,R.layout.adapter_view_layout,listData);
-        timelist.setAdapter(adapter);
+        timeListListView.setAdapter(new TimeListAdapter(this,R.layout.adapter_view_layout,timeListArray));
 
-        timelist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        timeListListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 final TimeObject clickedTime = (TimeObject) adapterView.getItemAtPosition(position);
@@ -127,17 +135,22 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        if(position == 0){
-            selectedPuzzleID = 18; // means all puzzle types are selected
+        if(adapterView.getId() == R.id.puzzle_spinner){
+            if(position == 0){
+              selectedPuzzleID = 18; // means all puzzle types are selected
+            }
+            else {
+             selectedPuzzleID = position - 1;
+            }
         }
-        else {
-            selectedPuzzleID = position - 1;
+        else if(adapterView.getId() == R.id.sortby_spinner){
+            selectedSortBy = position;
         }
         populateListView();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-
+        // do nothing
     }
 }
