@@ -5,14 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class Database extends SQLiteOpenHelper {
 
-    private static final String TAG = "Database";
-
     private static final String TABLE_NAME = "times_table";
-    private static final int TABLE_VERSION = 2;
+    private static final int TABLE_VERSION = 3;
     static final String COL0 = "puzzle_id";
     static final String COL1 = "minutes";
     static final String COL2 = "seconds";
@@ -27,7 +24,7 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL0 +" INTEGER, " +
+                COL0 + " INTEGER, " +
                 COL1 + " INTEGER, " +
                 COL2 + " INTEGER, " +
                 COL3 + " INTEGER, " +
@@ -36,6 +33,8 @@ public class Database extends SQLiteOpenHelper {
                 COL6 + " TEXT)";
         sqLiteDatabase.execSQL(createTable);
     }
+
+
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
@@ -53,7 +52,6 @@ public class Database extends SQLiteOpenHelper {
         contentValues.put(COL4, String.valueOf(time.getDay()));
         contentValues.put(COL5, String.valueOf(time.getMonth()));
         contentValues.put(COL6, String.valueOf(time.getYear()));
-        Log.d(TAG, "addData: Adding " + time.toString() + " to " + TABLE_NAME);
         long result = sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
         if(result == -1){
             return false;
@@ -84,6 +82,12 @@ public class Database extends SQLiteOpenHelper {
             query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL0 + " = " + selectedPuzzleID + orderBy;
         }
         return sqLiteDatabase.rawQuery(query, null);
+    }
+
+    void resetData(){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(sqLiteDatabase);
     }
 
     void deleteData(TimeObject time){

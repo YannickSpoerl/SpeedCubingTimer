@@ -1,6 +1,7 @@
 -welcomescreen
--multilanguage support
--custom colors
 -share time
 -share statistics
 -notification when personal best
+-multilanguage support
+-custom colors
+-scrambler

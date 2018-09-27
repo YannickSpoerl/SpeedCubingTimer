@@ -1,10 +1,12 @@
 package com.example.yannick.speedcubingtimer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +26,7 @@ import java.util.Calendar;
 
 public class Timer extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    boolean inspection_enabled = true;
+    boolean inspection_enabled = false;
     boolean timer_visible = true;
 
     private int selectedpuzzleID = 0;
@@ -141,6 +143,8 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
 
         puzzleSpinner.setOnItemSelectedListener(this);
 
+        loadSettings();
+
     }
 
     public void startInspection(){
@@ -171,11 +175,14 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
     }
 
     public void startTiming(){
+        if(inspection_enabled) {
+            inspectiontimer.cancel();
+        }
         inspection_running = false;
         timer_running = true;
         startTime = SystemClock.uptimeMillis();
         timeHandler.postDelayed(updateTimerThread,0);
-        inspectiontimer.cancel();
+
         if(!timer_visible) {
             startstopbutton.setText("Time hidden");
         }
@@ -203,6 +210,12 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         if(!addTime){
             Toast.makeText(this,"Couldnt save time", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void loadSettings(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        inspection_enabled = sharedPreferences.getBoolean(Settings.INSPECTION_ENABLED, true);
+        timer_visible = sharedPreferences.getBoolean(Settings.TIME_SHOWN_ENABLED, true);
     }
 
     @Override

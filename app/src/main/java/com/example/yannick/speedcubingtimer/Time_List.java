@@ -13,14 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class Time_List extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -102,6 +98,7 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
         }
         timeListListView.setAdapter(new TimeListAdapter(this,R.layout.adapter_view_layout,timeListArray));
 
+        // delete time dialoge
         timeListListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -135,7 +132,7 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        if(adapterView.getId() == R.id.puzzle_spinner){
+        if(adapterView.getId() == R.id.puzzle_spinner_list){
             if(position == 0){
               selectedPuzzleID = 18; // means all puzzle types are selected
             }
