@@ -26,20 +26,19 @@ import java.util.Calendar;
 
 public class Timer extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    boolean inspection_enabled = false;
-    boolean timer_visible = true;
-
+    boolean inspectionEnabled;
+    boolean timerVisible;
     private int selectedpuzzleID = 0;
-    boolean timer_running = false;
-    boolean inspection_running = false;
-    private long inspectiontimeleft = 15000;
+    boolean timerRunning = false;
+    boolean inspectionRunning = false;
+    private long inspectionTimeLeft = 15000;
     private long startTime = 0L, timeInMilliseconds = 0L, timeSwapBuff = 0L, updateTime = 0L;
-    private long finalminutes = 0L, finalseconds = 0L, finalmilliseconds = 0L;
+    private long finalMinutes = 0L, finalSeconds = 0L, finalMilliseconds = 0L;
 
-    private CountDownTimer inspectiontimer;
+    private CountDownTimer inspectionCountDownTimer;
     private Database database;
-    private Button startstopbutton;
-    private TextView statustextview;
+    private Button startStopButton;
+    private TextView messageTextView;
     private Handler timeHandler = new Handler();
 
     Runnable updateTimerThread = new Runnable() {
@@ -47,17 +46,17 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         public void run() {
             timeInMilliseconds = SystemClock.uptimeMillis()-startTime;
             updateTime = timeSwapBuff + timeInMilliseconds;
-            int secs = (int) (updateTime/1000);
-            int mins = secs/60;
-            secs %= 60;
+            int seconds = (int) (updateTime/1000);
+            int minutes = seconds/60;
+            seconds %= 60;
             int milliseconds = (int) (updateTime%1000);
-            if(timer_visible) {
-                startstopbutton.setText("" + mins + ":" + String.format("%2d", secs) + ":" +
-                        String.format("%3d", milliseconds));
+            if(timerVisible) {
+                startStopButton.setText("" + minutes + ":" + seconds + ":" +
+                        milliseconds);
             }
-            finalminutes = mins;
-            finalseconds = secs;
-            finalmilliseconds = milliseconds;
+            finalMinutes = minutes;
+            finalSeconds = seconds;
+            finalMilliseconds = milliseconds;
             timeHandler.postDelayed(this, 0);
         }
     };
@@ -67,13 +66,12 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
 
-        startstopbutton = (Button) findViewById(R.id.startstopbutton);
-        statustextview = (TextView) findViewById(R.id.status_textview);
+        startStopButton = (Button) findViewById(R.id.startstopbutton);
+        messageTextView = (TextView) findViewById(R.id.status_textview);
         Spinner puzzleSpinner = (Spinner) findViewById(R.id.puzzle_spinner);
         database = new Database(this);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.puzzles, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         puzzleSpinner.setAdapter(adapter);
 
         //Bottom Menu
@@ -110,16 +108,16 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
             }
         });
 
-        startstopbutton.setOnClickListener(new View.OnClickListener() {
+        startStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(timer_running){
+                if(timerRunning){
                     stopTiming();
                 }
-                else if(inspection_running){
+                else if(inspectionRunning){
                     startTiming();
                 }
-                else if (inspection_enabled){
+                else if (inspectionEnabled){
                     startInspection();
                 }
                 else {
@@ -128,14 +126,14 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
             }
         });
 
-        startstopbutton.setOnTouchListener(new View.OnTouchListener() {
+        startStopButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == motionEvent.ACTION_DOWN &&!timer_running){
-                    startstopbutton.setTextColor(Color.GREEN);
+                if(motionEvent.getAction() == motionEvent.ACTION_DOWN &&!timerRunning){
+                    startStopButton.setTextColor(Color.GREEN);
                 }
                 else if(motionEvent.getAction() == motionEvent.ACTION_UP){
-                    startstopbutton.setTextColor(Color.BLACK);
+                    startStopButton.setTextColor(Color.BLACK);
                 }
                 return false;
             }
@@ -148,61 +146,69 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
     }
 
     public void startInspection(){
-        timer_running = false;
-        inspection_running = true;
+        timerRunning = false;
+        inspectionRunning = true;
         startTime = 0L;
         timeInMilliseconds = 0L;
         timeSwapBuff = 0L;
         updateTime = 0L;
-        inspectiontimer = new CountDownTimer(15000, 1000) {
+        inspectionCountDownTimer = new CountDownTimer(15000, 1000) {
             @Override
             public void onTick(long l) {
-                inspectiontimeleft = l;
-                startstopbutton.setText(String.valueOf((int) inspectiontimeleft/1000));
+                inspectionTimeLeft = l;
+                startStopButton.setText(String.valueOf((int) inspectionTimeLeft /1000));
             }
             @Override
             public void onFinish() {
-                startstopbutton.setText("DNF");
-                timer_running = false;
-                inspection_running = false;
-                statustextview.setText("Timing Stopped");
+                startStopButton.setText("DNF");
+                timerRunning = false;
+                inspectionRunning = false;
+                messageTextView.setText("Timing Stopped");
 
             }
         }.start();
-        startstopbutton.setTextColor(Color.RED);
-        statustextview.setText("Inspecting");
+        startStopButton.setTextColor(Color.RED);
+        messageTextView.setText("Inspecting");
 
     }
 
     public void startTiming(){
-        if(inspection_enabled) {
-            inspectiontimer.cancel();
+        if(inspectionEnabled) {
+            inspectionCountDownTimer.cancel();
+            startTime = 0L;
+            timeInMilliseconds = 0L;
+            timeSwapBuff = 0L;
+            updateTime = 0L;
+            finalMinutes = 0L;
+            finalSeconds = 0L;
+            finalMilliseconds = 0L;
         }
-        inspection_running = false;
-        timer_running = true;
+        inspectionRunning = false;
+        timerRunning = true;
         startTime = SystemClock.uptimeMillis();
         timeHandler.postDelayed(updateTimerThread,0);
 
-        if(!timer_visible) {
-            startstopbutton.setText("Time hidden");
+        if(!timerVisible) {
+            startStopButton.setText("Time hidden");
         }
-        startstopbutton.setTextColor(Color.BLACK);
-        statustextview.setText("Timing");
+        startStopButton.setTextColor(Color.BLACK);
+        messageTextView.setText("Timing");
 
     }
 
     public void stopTiming(){
-        timer_running = false;
-        inspection_running = false;
+        timerRunning = false;
+        inspectionRunning = false;
         timeSwapBuff += timeInMilliseconds;
-        startstopbutton.setTextColor(Color.BLACK);
+        startStopButton.setTextColor(Color.BLACK);
         timeHandler.removeCallbacks(updateTimerThread);
-        startstopbutton.setText("" + finalminutes + ":" + String.format("%2d", finalseconds) + ":" +
-                String.format("%3d", finalmilliseconds));
+        startStopButton.setText("" + finalMinutes + ":" + String.format("%2d", finalSeconds) + ":" +
+                String.format("%3d", finalMilliseconds));
         Calendar c = Calendar.getInstance();
-        TimeObject newTime = new TimeObject(finalminutes,finalseconds,finalmilliseconds,selectedpuzzleID,
+        TimeObject newTime = new TimeObject(finalMinutes, finalSeconds, finalMilliseconds,selectedpuzzleID,
                 c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH)+1, c.get(Calendar.YEAR));
         saveTime(newTime);
+        messageTextView.setText("Timing stopped");
     }
 
     public void saveTime(TimeObject newTime){
@@ -214,8 +220,8 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
 
     public void loadSettings(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        inspection_enabled = sharedPreferences.getBoolean(Settings.INSPECTION_ENABLED, true);
-        timer_visible = sharedPreferences.getBoolean(Settings.TIME_SHOWN_ENABLED, true);
+        inspectionEnabled = sharedPreferences.getBoolean(Settings.INSPECTION_ENABLED, true);
+        timerVisible = sharedPreferences.getBoolean(Settings.TIME_SHOWN_ENABLED, true);
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 public class About extends AppCompatActivity {
 
@@ -21,6 +22,8 @@ public class About extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(4);
         menuItem.setChecked(true);
 
+        ImageView iconImageView = (ImageView) findViewById(R.id.iconImageView);
+        iconImageView.setImageResource(R.drawable.ic_launcher_web);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

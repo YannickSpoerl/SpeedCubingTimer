@@ -113,6 +113,13 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        exportDataButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(Settings.this, "Coming soon", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         refreshSettings();
     }
 

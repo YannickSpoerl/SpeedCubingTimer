@@ -25,7 +25,8 @@
                 android:text="15 sec Inspection"
                 android:textSize="20sp"
                 android:layout_alignParentStart="true"
-                android:layout_margin="10dp"/>
+                android:layout_margin="10dp"
+                android:buttonTint="@color/colorPrimary"/>
 
             <CheckBox
                 android:id="@+id/timeVisibleCheckbox"
@@ -35,7 +36,8 @@
                 android:layout_margin="10dp"
                 android:textSize="20sp"
                 android:layout_below="@+id/inspectionEnabledCheckbox"
-                android:text="Show time while timing"/>
+                android:text="Show time while timing"
+                android:buttonTint="@color/colorPrimary"/>
 
             <RelativeLayout
                 android:layout_width="wrap_content"

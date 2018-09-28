@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,13 +23,23 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
 
     Database database;
     ListView timeListListView;
+    FloatingActionButton floatingActionButton;
     private int selectedPuzzleID;
     private int selectedSortBy = 0; // 0 = latest, 1 = oldest, 2 = fastest, 3 = slowest
+    private int floatingActionButtonMode = 0; // 0 = share, 1 = delete
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time__list);
+
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.shareFloatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                floatingActionButtonPressed();
+            }
+        });
 
         Spinner puzzleSpinner = (Spinner) findViewById(R.id.puzzle_spinner_list);
         ArrayAdapter<CharSequence> puzzleSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.puzzles_list, android.R.layout.simple_spinner_item);
@@ -103,25 +114,14 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 final TimeObject clickedTime = (TimeObject) adapterView.getItemAtPosition(position);
-                AlertDialog.Builder deleteAlert = new AlertDialog.Builder(Time_List.this);
-                deleteAlert.setTitle("Delete Time?");
-                deleteAlert.setMessage("You are about to delete " + clickedTime.toString() + "\n Are you sure?");
-                deleteAlert.setPositiveButton("Yes, delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        database.deleteData(clickedTime);
-                        populateListView();
-                        Toast.makeText(Time_List.this, "Deleted selected time", Toast.LENGTH_LONG).show();
-                    }
-                });
-                deleteAlert.setNegativeButton("No, don't delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(Time_List.this, "No time deleted", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-                deleteAlert.create().show();
+                switch (floatingActionButtonMode){
+                    case 0:
+                        shareTime(clickedTime);
+                        break;
+                    case 1:
+                        deleteTime(clickedTime);
+                        break;
+                }
             }
         });
     }
@@ -144,6 +144,52 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
             selectedSortBy = position;
         }
         populateListView();
+    }
+
+    public void shareTime(TimeObject clickedTime){
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, "Hey there");
+        try{
+            startActivity(Intent.createChooser(intent, "Share your time via:"));
+        } catch(android.content.ActivityNotFoundException ex){
+            Toast.makeText(this, "Could not share Time", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void deleteTime(final TimeObject clickedTime){
+        AlertDialog.Builder deleteAlert = new AlertDialog.Builder(Time_List.this);
+        deleteAlert.setTitle("Delete Time?");
+        deleteAlert.setMessage("You are about to delete " + clickedTime.toString() + "\n Are you sure?");
+        deleteAlert.setPositiveButton("Yes, delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                database.deleteData(clickedTime);
+                populateListView();
+                Toast.makeText(Time_List.this, "Deleted selected time", Toast.LENGTH_SHORT).show();
+            }
+        });
+        deleteAlert.setNegativeButton("No, don't delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+
+        deleteAlert.create().show();
+    }
+
+    public void floatingActionButtonPressed(){
+        switch (floatingActionButtonMode){
+            case 0:
+                floatingActionButtonMode = 1;
+                floatingActionButton.setImageResource(R.drawable.ic_delete_white_24dp);
+                Toast.makeText(this, "Click to delete time", Toast.LENGTH_SHORT).show();
+                break;
+            case 1:
+                floatingActionButtonMode = 0;
+                floatingActionButton.setImageResource(R.drawable.ic_share_white_24dp);
+                Toast.makeText(this, "Click to share time", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override

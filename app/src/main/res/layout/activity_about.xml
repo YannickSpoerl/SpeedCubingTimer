@@ -18,13 +18,33 @@
             android:layout_alignParentTop="true">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/aboutAppTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:text="About this Application"
+                android:textSize="25sp"
+                android:textColor="@android:color/black"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="224dp"
-                android:text="About" />
+                android:layout_margin="20dp"/>
+
+            <ImageView
+                android:id="@+id/iconImageView"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/aboutAppTextView"
+                android:layout_centerVertical="true"/>
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iconImageView"
+                android:layout_margin="20dp"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/black"
+                android:text="Version 0.3, September 2018 \n \n Designed and written by \n Yannick Spörl, github.com/YannickSpoerl
+                                \n \n Feel free to contact me for bug-reports or other feedback or to take a look at the source-code \n at github.com/yannickspoerl/speedcubingtimer"/>
+
         </RelativeLayout>
 
         <RelativeLayout
