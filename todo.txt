@@ -1,5 +1,9 @@
+bugs
+-timer display always same number of digits
+-timer should not continue counting after being stopped
+
+future ideas
 -welcomescreen
--share time
 -share statistics
 -notification when personal best
 -multilanguage support

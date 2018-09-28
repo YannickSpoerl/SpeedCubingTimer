@@ -1,5 +1,6 @@
 package com.example.yannick.speedcubingtimer;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -61,6 +62,7 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         }
     };
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,22 +88,16 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
                 switch (item.getItemId()) {
 
                     case R.id.ic_settings:
-                        Intent intent = new Intent(Timer.this, Settings.class);
-                        startActivity(intent);
+                        startActivity(new Intent(Timer.this, Settings.class));
                         break;
                     case R.id.ic_time_list:
-                        Intent intent2 = new Intent(Timer.this, Time_List.class);
-                        startActivity(intent2);
-                        break;
-                    case R.id.ic_timer:
+                        startActivity(new Intent(Timer.this, Time_List.class));
                         break;
                     case R.id.ic_statistics:
-                        Intent intent3 = new Intent(Timer.this, Statistics.class);
-                        startActivity(intent3);
+                        startActivity(new Intent(Timer.this, Statistics.class));
                         break;
                     case R.id.ic_about:
-                        Intent intent4 = new Intent(Timer.this, About.class);
-                        startActivity(intent4);
+                        startActivity(new Intent(Timer.this, About.class));
                         break;
                 }
                 return false;
@@ -129,10 +125,10 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         startStopButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == motionEvent.ACTION_DOWN &&!timerRunning){
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN &&!timerRunning){
                     startStopButton.setTextColor(Color.GREEN);
                 }
-                else if(motionEvent.getAction() == motionEvent.ACTION_UP){
+                else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
                     startStopButton.setTextColor(Color.BLACK);
                 }
                 return false;
@@ -202,8 +198,7 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         timeSwapBuff += timeInMilliseconds;
         startStopButton.setTextColor(Color.BLACK);
         timeHandler.removeCallbacks(updateTimerThread);
-        startStopButton.setText("" + finalMinutes + ":" + String.format("%2d", finalSeconds) + ":" +
-                String.format("%3d", finalMilliseconds));
+        startStopButton.setText(finalMinutes + ":" + finalSeconds + ":" + finalMilliseconds);
         Calendar c = Calendar.getInstance();
         TimeObject newTime = new TimeObject(finalMinutes, finalSeconds, finalMilliseconds,selectedpuzzleID,
                 c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH)+1, c.get(Calendar.YEAR));

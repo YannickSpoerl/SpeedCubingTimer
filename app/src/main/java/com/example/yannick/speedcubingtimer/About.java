@@ -31,23 +31,16 @@ public class About extends AppCompatActivity {
                 switch (item.getItemId()) {
 
                     case R.id.ic_settings:
-                        Intent intent = new Intent(About.this, Settings.class);
-                        startActivity(intent);
+                        startActivity(new Intent(About.this, Settings.class));
                         break;
                     case R.id.ic_time_list:
-                        Intent intent2 = new Intent(About.this, Time_List.class);
-                        startActivity(intent2);
+                        startActivity(new Intent(About.this, Time_List.class));
                         break;
                     case R.id.ic_timer:
-                        Intent intent4 = new Intent(About.this, Timer.class);
-                        startActivity(intent4);
+                        startActivity(new Intent(About.this, Timer.class));
                         break;
                     case R.id.ic_statistics:
-                        Intent intent3 = new Intent(About.this, Statistics.class);
-                        startActivity(intent3);
-                        break;
-                    case R.id.ic_about:
-
+                        startActivity(new Intent(About.this, Statistics.class));
                         break;
                 }
                 return false;
@@ -57,5 +50,6 @@ public class About extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
+        //disable backButton
     }
 }

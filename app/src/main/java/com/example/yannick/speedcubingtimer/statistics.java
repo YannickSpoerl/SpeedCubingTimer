@@ -28,22 +28,16 @@ public class Statistics extends AppCompatActivity {
                 switch (item.getItemId()) {
 
                     case R.id.ic_settings:
-                        Intent intent3 = new Intent(Statistics.this, Settings.class);
-                        startActivity(intent3);
+                        startActivity(new Intent(Statistics.this, Settings.class));
                         break;
                     case R.id.ic_time_list:
-                        Intent intent2 = new Intent(Statistics.this, Time_List.class);
-                        startActivity(intent2);
+                        startActivity(new Intent(Statistics.this, Time_List.class));
                         break;
                     case R.id.ic_timer:
-                        Intent intent = new Intent(Statistics.this, Timer.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.ic_statistics:
+                        startActivity(new Intent(Statistics.this, Timer.class));
                         break;
                     case R.id.ic_about:
-                        Intent intent4 = new Intent(Statistics.this, About.class);
-                        startActivity(intent4);
+                        startActivity(new Intent(Statistics.this, About.class));
                         break;
                 }
                 return false;

@@ -66,22 +66,16 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
                 switch (item.getItemId()) {
 
                     case R.id.ic_settings:
-                        Intent intent3 = new Intent(Time_List.this, Settings.class);
-                        startActivity(intent3);
-                        break;
-                    case R.id.ic_time_list:
+                        startActivity(new Intent(Time_List.this, Settings.class));
                         break;
                     case R.id.ic_timer:
-                        Intent intent = new Intent(Time_List.this, Timer.class);
-                        startActivity(intent);
+                        startActivity(new Intent(Time_List.this, Timer.class));
                         break;
                     case R.id.ic_statistics:
-                        Intent intent2 = new Intent(Time_List.this, Statistics.class);
-                        startActivity(intent2);
+                        startActivity(new Intent(Time_List.this, Statistics.class));
                         break;
                     case R.id.ic_about:
-                        Intent intent4 = new Intent(Time_List.this, About.class);
-                        startActivity(intent4);
+                        startActivity(new Intent(Time_List.this, About.class));
                         break;
                 }
                 return false;
@@ -148,12 +142,9 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
 
     public void shareTime(TimeObject clickedTime){
         final Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_TEXT, "Hey there");
-        try{
-            startActivity(Intent.createChooser(intent, "Share your time via:"));
-        } catch(android.content.ActivityNotFoundException ex){
-            Toast.makeText(this, "Could not share Time", Toast.LENGTH_LONG).show();
-        }
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT,"Hey, I want to share this time with you: " + clickedTime.toString());
+        startActivity(Intent.createChooser(intent, "Share your time via:"));
     }
 
     public void deleteTime(final TimeObject clickedTime){
