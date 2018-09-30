@@ -2,16 +2,20 @@ package com.example.yannick.speedcubingtimer;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -23,21 +27,44 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
 
     Database database;
     ListView timeListListView;
-    FloatingActionButton floatingActionButton;
+    FloatingActionButton menuFAB, shareFAB, deleteFAB;
+    Animation fabOpen, fabClose, fabRotateClockwise, fabRotateAnticlockwise;
     private int selectedPuzzleID;
     private int selectedSortBy = 0; // 0 = latest, 1 = oldest, 2 = fastest, 3 = slowest
     private int floatingActionButtonMode = 0; // 0 = share, 1 = delete
+    boolean menuFABopen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time__list);
 
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.shareFloatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        menuFAB = (FloatingActionButton) findViewById(R.id.menuFAB);
+        shareFAB = (FloatingActionButton) findViewById(R.id.shareFAB);
+        deleteFAB = (FloatingActionButton) findViewById(R.id.deleteFAB);
+        fabOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        fabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        fabRotateClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
+        fabRotateAnticlockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anticlockwise);
+
+        menuFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                floatingActionButtonPressed();
+                menuClicked();
+            }
+        });
+
+        shareFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               switchFABmode();
+            }
+        });
+
+        deleteFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchFABmode();
             }
         });
 
@@ -88,21 +115,8 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
     }
 
     private void populateListView(){
-        // Load all selected Time-Objects into ListView
-        ArrayList<TimeObject> timeListArray = new ArrayList<>();
-        Cursor cursor = database.getData(selectedPuzzleID, selectedSortBy);
-        while(cursor.moveToNext()){
-            int puzzleID = cursor.getInt(cursor.getColumnIndex(Database.COL0));
-            long minutes = cursor.getLong(cursor.getColumnIndex(Database.COL1));
-            long seconds = cursor.getLong(cursor.getColumnIndex(Database.COL2));
-            long milliseconds = cursor.getLong(cursor.getColumnIndex(Database.COL3));
-            int day = cursor.getInt(cursor.getColumnIndex(Database.COL4));
-            int month = cursor.getInt(cursor.getColumnIndex(Database.COL5));
-            int year = cursor.getInt(cursor.getColumnIndex(Database.COL6));
-            timeListArray.add(new TimeObject(minutes, seconds, milliseconds, puzzleID, day, month, year));
-        }
+        ArrayList<TimeObject> timeListArray = database.getTimeListArray(selectedPuzzleID, selectedSortBy);
         timeListListView.setAdapter(new TimeListAdapter(this,R.layout.adapter_view_layout,timeListArray));
-
         // delete time dialoge
         timeListListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -168,18 +182,39 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
         deleteAlert.create().show();
     }
 
-    public void floatingActionButtonPressed(){
+    public void switchFABmode(){
         switch (floatingActionButtonMode){
             case 0:
+                shareFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorGrey)));
+                deleteFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimary)));
                 floatingActionButtonMode = 1;
-                floatingActionButton.setImageResource(R.drawable.ic_delete_white_24dp);
-                Toast.makeText(this, "Click to delete time", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Tap time to delete",Toast.LENGTH_SHORT).show();
                 break;
             case 1:
+                shareFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimary)));
+                deleteFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorGrey)));
+                Toast.makeText(this,"Tap time to share", Toast.LENGTH_SHORT).show();
                 floatingActionButtonMode = 0;
-                floatingActionButton.setImageResource(R.drawable.ic_share_white_24dp);
-                Toast.makeText(this, "Click to share time", Toast.LENGTH_SHORT).show();
                 break;
+        }
+    }
+
+    public void menuClicked(){
+        if(menuFABopen){
+            shareFAB.startAnimation(fabClose);
+            deleteFAB.startAnimation(fabClose);
+            menuFAB.startAnimation(fabRotateAnticlockwise);
+            shareFAB.setClickable(false);
+            deleteFAB.setClickable(false);
+            menuFABopen = false;
+        }
+        else{
+            shareFAB.startAnimation(fabOpen);
+            deleteFAB.startAnimation(fabOpen);
+            menuFAB.startAnimation(fabRotateClockwise);
+            shareFAB.setClickable(true);
+            deleteFAB.setClickable(true);
+            menuFABopen = true;
         }
     }
 

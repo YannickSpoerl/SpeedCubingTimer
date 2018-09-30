@@ -1,11 +1,15 @@
 package com.example.yannick.speedcubingtimer;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +19,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Settings extends AppCompatActivity {
 
@@ -27,12 +39,12 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
         final Button resetAllTimesButton = (Button) findViewById(R.id.resetButton);
         Button exportDataButton = (Button) findViewById(R.id.exportDataButton);
+        Button exportDataJSONButton = (Button) findViewById(R.id.exportJSONButton);
         inspectionTimeEnabledCheckBox = (CheckBox) findViewById(R.id.inspectionEnabledCheckbox);
         timeShownEnabledCheckBox = (CheckBox) findViewById(R.id.timeVisibleCheckbox);
-
+        database = new Database(this);
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
@@ -86,10 +98,67 @@ public class Settings extends AppCompatActivity {
         exportDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Settings.this, "Coming soon", Toast.LENGTH_SHORT).show();
+                exportTxtData();
             }
         });
+
+        exportDataJSONButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                exportJSONData();
+            }
+        });
+
         refreshSettings();
+    }
+
+    public void exportTxtData() {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            ArrayList<TimeObject> timeList = database.getTimeListArray(18, 0);
+            StringBuilder stringBuilder = new StringBuilder();
+            for(TimeObject time : timeList){
+                stringBuilder.append("\n");
+                stringBuilder.append(time.toString());
+            }
+            File txtFile = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), "exportedTimes.txt");
+            try{
+                FileOutputStream fileOutputStream = new FileOutputStream(txtFile);
+                fileOutputStream.write(stringBuilder.toString().getBytes());
+                fileOutputStream.close();
+            } catch(IOException e){
+                Toast.makeText(this,"Couldn't export time.", Toast.LENGTH_SHORT).show();
+            }
+            Toast.makeText(this,"Exported times to Downloads directory", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Toast.makeText(this,"Permission for writing to external storage not granted. Couldn't save file.",Toast.LENGTH_SHORT).show();
+    }
+
+    public void exportJSONData() {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            ArrayList<TimeObject> timeList = database.getTimeListArray(18, 0);
+            JSONArray jsonArray = new JSONArray();
+            for(TimeObject time : timeList){
+                try {
+                    jsonArray.put(time.getJSON());
+                } catch (JSONException j){
+                    //ignore lol
+                }
+            }
+            File jsonFile = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), "exportedTimes.json");
+            try{
+                FileOutputStream fileOutputStream = new FileOutputStream(jsonFile);
+                fileOutputStream.write(jsonArray.toString().getBytes());
+                fileOutputStream.close();
+            } catch(IOException e){
+                Toast.makeText(this,"Couldn't export time.", Toast.LENGTH_SHORT).show();
+            }
+            Toast.makeText(this,"Exported times to Downloads directory", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Toast.makeText(this,"Permission for writing to external storage not granted. Couldn't save file.",Toast.LENGTH_SHORT).show();
     }
 
     public void resetAllTimes(){
@@ -99,7 +168,6 @@ public class Settings extends AppCompatActivity {
         deleteAlert.setPositiveButton("Yes, reset", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                database = new Database(Settings.this);
                 database.resetData();
                 Toast.makeText(Settings.this, "Reseted times", Toast.LENGTH_LONG).show();
             }

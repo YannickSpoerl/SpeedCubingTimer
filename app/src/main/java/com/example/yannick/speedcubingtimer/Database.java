@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class Database extends SQLiteOpenHelper {
 
     private static final String TABLE_NAME = "times_table";
@@ -57,6 +59,22 @@ public class Database extends SQLiteOpenHelper {
             return false;
         }
         return true;
+    }
+
+    public ArrayList<TimeObject> getTimeListArray(int selectedPuzzleID, int selectedSortBy){
+        ArrayList<TimeObject> timeListArray = new ArrayList<>();
+        Cursor cursor = this.getData(selectedPuzzleID, selectedSortBy);
+        while(cursor.moveToNext()){
+            int puzzleID = cursor.getInt(cursor.getColumnIndex(Database.COL0));
+            long minutes = cursor.getLong(cursor.getColumnIndex(Database.COL1));
+            long seconds = cursor.getLong(cursor.getColumnIndex(Database.COL2));
+            long milliseconds = cursor.getLong(cursor.getColumnIndex(Database.COL3));
+            int day = cursor.getInt(cursor.getColumnIndex(Database.COL4));
+            int month = cursor.getInt(cursor.getColumnIndex(Database.COL5));
+            int year = cursor.getInt(cursor.getColumnIndex(Database.COL6));
+            timeListArray.add(new TimeObject(minutes, seconds, milliseconds, puzzleID, day, month, year));
+        }
+        return timeListArray;
     }
 
     Cursor getData(int selectedPuzzleID, int selectedSortBy){

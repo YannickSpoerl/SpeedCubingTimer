@@ -1,6 +1,7 @@
 bugs
 -timer display always same number of digits
 -timer should not continue counting after being stopped
+-fab switch color bug
 
 future ideas
 -welcomescreen

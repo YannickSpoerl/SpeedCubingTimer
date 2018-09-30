@@ -1,5 +1,9 @@
 package com.example.yannick.speedcubingtimer;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class TimeObject {
 
     private long minutes, seconds, milliseconds;
@@ -79,6 +83,22 @@ public class TimeObject {
 
     public String getPuzzleString(){
         return getPuzzleByID(this.puzzleID);
+    }
+
+    public JSONObject getJSON() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("puzzletype",this.getPuzzleString());
+        JSONObject jsonObjectTime = new JSONObject();
+        jsonObjectTime.put("minutes", this.minutes);
+        jsonObjectTime.put("seconds", this.seconds);
+        jsonObjectTime.put("milliseconds", this.milliseconds);
+        jsonObject.put("time", jsonObjectTime);
+        JSONObject jsonObjectDate = new JSONObject();
+        jsonObjectDate.put("day", this.day);
+        jsonObjectDate.put("month", this.month);
+        jsonObjectDate.put("year", this.year);
+        jsonObject.put("date", jsonObjectDate);
+        return jsonObject;
     }
 
     public static String getPuzzleByID(int id){

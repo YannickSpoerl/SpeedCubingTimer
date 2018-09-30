@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/puzzle_tv"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"></Spinner>
+                android:layout_marginTop="10dp"/>
 
             <TextView
                 android:id="@+id/sortby_tv"
@@ -50,7 +50,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"></Spinner>
+                android:layout_marginTop="10dp"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -63,7 +63,35 @@
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/timeList"></ListView>
+                android:id="@+id/timeList"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_above="@+id/shareFAB"
+                android:visibility="invisible"
+                android:id="@+id/deleteFAB"
+                android:backgroundTint="@color/colorGrey"
+                app:borderWidth="0dp"
+                android:src="@drawable/ic_delete_white_24dp">
+            </android.support.design.widget.FloatingActionButton>
+
+            <android.support.design.widget.FloatingActionButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/menuFAB"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_alignParentRight="true"
+                android:id="@+id/shareFAB"
+                android:backgroundTint="@color/colorPrimary"
+                app:borderWidth="0dp"
+                android:src="@drawable/ic_share_white_24dp">
+            </android.support.design.widget.FloatingActionButton>
 
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="wrap_content"
@@ -72,10 +100,10 @@
                 android:layout_marginRight="20dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/shareFloatingActionButton"
+                android:id="@+id/menuFAB"
                 android:backgroundTint="@color/colorPrimary"
                 app:borderWidth="0dp"
-                android:src="@drawable/ic_share_white_24dp">
+                android:src="@drawable/ic_more_vert_white_24dp">
             </android.support.design.widget.FloatingActionButton>
 
 

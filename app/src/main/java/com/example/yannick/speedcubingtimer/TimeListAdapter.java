@@ -94,7 +94,6 @@ public class TimeListAdapter extends ArrayAdapter<TimeObject> {
         holder.time.setText(timeString);
         holder.date.setText(dateString);
         holder.puzzle.setText(puzzlestring);
-
         return convertView;
     }
 }

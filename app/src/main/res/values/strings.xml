@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Speedcubing Timer</string>
+    <string name="about_this_application">About this Application</string>
 
     <string-array name="puzzles">
         <item>3x3</item>

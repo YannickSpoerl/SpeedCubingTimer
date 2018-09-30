@@ -39,31 +39,39 @@
                 android:text="Show time while timing"
                 android:buttonTint="@color/colorPrimary"/>
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="70dp"
-                android:layout_centerHorizontal="true">
-
                 <Button
                     android:id="@+id/resetButton"
-                    android:layout_width="150dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@android:color/white"
+                    android:layout_width="175dp"
                     android:layout_height="wrap_content"
                     android:background="@color/colorLightGrey"
                     android:layout_margin="20dp"
+                    android:layout_below="@id/timeVisibleCheckbox"
                     android:text="Reset all Times" />
 
                 <Button
                     android:id="@+id/exportDataButton"
-                    android:layout_width="150dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@android:color/white"
+                    android:layout_width="175dp"
                     android:layout_height="wrap_content"
                     android:background="@color/colorLightGrey"
                     android:layout_margin="20dp"
-                    android:layout_alignParentRight="true"
-                    android:text="Export Times" />
+                    android:layout_below="@+id/resetButton"
+                    android:text="Export Times as .txt" />
 
-            </RelativeLayout>
+                <Button
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@android:color/white"
+                    android:layout_width="175dp"
+                    android:layout_margin="20dp"
+                    android:layout_below="@+id/exportDataButton"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorLightGrey"
+                    android:id="@+id/exportJSONButton"
+                    android:text="Export Times as .json" />
+
 
         </RelativeLayout>
 
