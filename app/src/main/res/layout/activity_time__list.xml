@@ -68,6 +68,19 @@
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/addFAB"
+                android:backgroundTint="@color/colorPrimary"
+                app:borderWidth="0dp"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/ic_add_white_24dp">
+            </android.support.design.widget.FloatingActionButton>
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_alignParentRight="true"

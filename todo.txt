@@ -1,9 +1,13 @@
 bugs
--timer display always same number of digits
--timer should not continue counting after being stopped
 -fab switch color bug
 
+todo
+-statistics
+-create time fab + dialog
+-swipe to change activities
+
 future ideas
+-import times
 -welcomescreen
 -share statistics
 -notification when personal best

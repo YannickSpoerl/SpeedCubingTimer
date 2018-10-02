@@ -1,9 +1,9 @@
 package com.example.yannick.speedcubingtimer;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,16 +19,20 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Time_List extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-    Database database;
-    ListView timeListListView;
-    FloatingActionButton menuFAB, shareFAB, deleteFAB;
+    private Database database;
+    private ListView timeListListView;
+    private DatePickerDialog.OnDateSetListener dateSetListener;
+    FloatingActionButton menuFAB, shareFAB, deleteFAB, addFAB;
     Animation fabOpen, fabClose, fabRotateClockwise, fabRotateAnticlockwise;
     private int selectedPuzzleID;
     private int selectedSortBy = 0; // 0 = latest, 1 = oldest, 2 = fastest, 3 = slowest
@@ -38,10 +43,10 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time__list);
-
         menuFAB = (FloatingActionButton) findViewById(R.id.menuFAB);
         shareFAB = (FloatingActionButton) findViewById(R.id.shareFAB);
         deleteFAB = (FloatingActionButton) findViewById(R.id.deleteFAB);
+        addFAB = (FloatingActionButton) findViewById(R.id.addFAB);
         fabOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         fabRotateClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
@@ -65,6 +70,13 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onClick(View view) {
                 switchFABmode();
+            }
+        });
+
+        addFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                choosePuzzleType();
             }
         });
 
@@ -178,25 +190,114 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
-
-        deleteAlert.create().show();
+        final AlertDialog alertDialog = deleteAlert.create();
+        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+            }
+        });
+        alertDialog.show();
     }
 
     public void switchFABmode(){
         switch (floatingActionButtonMode){
             case 0:
-                shareFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorGrey)));
-                deleteFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimary)));
+                shareFAB.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGrey));
+                deleteFAB.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 floatingActionButtonMode = 1;
                 Toast.makeText(this, "Tap time to delete",Toast.LENGTH_SHORT).show();
                 break;
             case 1:
-                shareFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorPrimary)));
-                deleteFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorGrey)));
+                shareFAB.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                deleteFAB.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGrey));
                 Toast.makeText(this,"Tap time to share", Toast.LENGTH_SHORT).show();
                 floatingActionButtonMode = 0;
                 break;
         }
+    }
+
+    public void choosePuzzleType(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose the type of puzzle");
+        String[] puzzleTypes = {"3x3", "4x4", "5x5", "2x2", "3x3 BLD", "3x3 OH", "3x3 FM", "3x3 FT", "Megaminx", "Pyraminx", "Square-1", "Clock", "Skewb", "6x6", "7x7", "4x4 BLD", "5x5 BLD", "3x3 MBLD"};
+         builder.setItems(puzzleTypes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+
+                chooseTime(i);
+            }
+        });
+        builder.show();
+
+    }
+
+    public void chooseTime(final int puzzleType){
+        Toast.makeText(Time_List.this, "clicked: " + puzzleType, Toast.LENGTH_SHORT).show();
+        final AlertDialog.Builder addTimeDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog, null);
+        addTimeDialog.setTitle("Add new Time");
+        addTimeDialog.setMessage("Enter a new time");
+        addTimeDialog.setView(dialogView);
+        final NumberPicker minutesPicker = (NumberPicker) dialogView.findViewById(R.id.minutesPicker);
+        final NumberPicker secondsPicker = (NumberPicker) dialogView.findViewById(R.id.secondsPicker);
+        final NumberPicker millisecondsPicker = (NumberPicker) dialogView.findViewById(R.id.millisecondsPicker);
+        minutesPicker.setMaxValue(1339);
+        minutesPicker.setMinValue(0);
+        minutesPicker.setWrapSelectorWheel(true);
+        minutesPicker.setValue(0);
+        secondsPicker.setMaxValue(59);
+        secondsPicker.setMinValue(0);
+        secondsPicker.setWrapSelectorWheel(true);
+        secondsPicker.setValue(0);
+        millisecondsPicker.setMaxValue(999);
+        millisecondsPicker.setMinValue(0);
+        millisecondsPicker.setWrapSelectorWheel(true);
+        millisecondsPicker.setValue(0);
+        addTimeDialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                chooseDate(puzzleType, minutesPicker.getValue(), secondsPicker.getValue(), millisecondsPicker.getValue());
+            }
+        });
+        addTimeDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(Time_List.this,"No time created", Toast.LENGTH_SHORT).show();
+            }
+        });
+        final AlertDialog alertDialog = addTimeDialog.create();
+        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+            }
+        });
+        alertDialog.show();
+    }
+
+    public void chooseDate(final int puzzleType, final long minutes, final long seconds, final long milliseconds){
+        Toast.makeText(Time_List.this, "Chosen: " + puzzleType + " " + minutes + " " + seconds+ " " +  milliseconds, Toast.LENGTH_SHORT).show();
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) ;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(Time_List.this,
+                android.R.style.Theme_Holo_Light_Dialog_MinWidth, dateSetListener, year, month, day);
+        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorTransparent)));
+        datePickerDialog.show();
+        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month++;
+                TimeObject newTime = new TimeObject(minutes, seconds, milliseconds, puzzleType, day, month, year);
+                Toast.makeText(Time_List.this, "Chosen: " + puzzleType + " " + minutes + " " + seconds+ " " +  milliseconds, Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 
     public void menuClicked(){

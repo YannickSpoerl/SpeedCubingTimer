@@ -1,6 +1,5 @@
 package com.example.yannick.speedcubingtimer;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -140,7 +139,6 @@ public class TimeObject {
             case 17:
                 return "3x3 MBLD";
         }
-
         return "Not a puzzle";
     }
 }

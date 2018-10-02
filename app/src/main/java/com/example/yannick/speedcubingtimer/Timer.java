@@ -52,8 +52,8 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
             seconds %= 60;
             int milliseconds = (int) (updateTime%1000);
             if(timerVisible) {
-                startStopButton.setText("" + minutes + ":" + seconds + ":" +
-                        milliseconds);
+                startStopButton.setText(String.format("%02d", minutes) + ":" + String.format("%02d", seconds) + ":" +
+                        String.format("%03d", milliseconds));
             }
             finalMinutes = minutes;
             finalSeconds = seconds;
@@ -171,14 +171,14 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
     public void startTiming(){
         if(inspectionEnabled) {
             inspectionCountDownTimer.cancel();
-            startTime = 0L;
-            timeInMilliseconds = 0L;
-            timeSwapBuff = 0L;
-            updateTime = 0L;
-            finalMinutes = 0L;
-            finalSeconds = 0L;
-            finalMilliseconds = 0L;
         }
+        startTime = 0L;
+        timeInMilliseconds = 0L;
+        timeSwapBuff = 0L;
+        updateTime = 0L;
+        finalMinutes = 0L;
+        finalSeconds = 0L;
+        finalMilliseconds = 0L;
         inspectionRunning = false;
         timerRunning = true;
         startTime = SystemClock.uptimeMillis();
@@ -198,7 +198,8 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         timeSwapBuff += timeInMilliseconds;
         startStopButton.setTextColor(Color.BLACK);
         timeHandler.removeCallbacks(updateTimerThread);
-        startStopButton.setText(finalMinutes + ":" + finalSeconds + ":" + finalMilliseconds);
+        startStopButton.setText(String.format("%02d", finalMinutes) + ":" + String.format("%02d", finalSeconds) + ":" +
+                String.format("%03d", finalMilliseconds));
         Calendar c = Calendar.getInstance();
         TimeObject newTime = new TimeObject(finalMinutes, finalSeconds, finalMilliseconds,selectedpuzzleID,
                 c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH)+1, c.get(Calendar.YEAR));

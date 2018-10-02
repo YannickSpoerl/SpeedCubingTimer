@@ -177,7 +177,15 @@ public class Settings extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
-        deleteAlert.create().show();
+        final AlertDialog alertDialog = deleteAlert.create();
+        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+            }
+        });
+        alertDialog.show();
     }
 
     public void saveSettings(){
