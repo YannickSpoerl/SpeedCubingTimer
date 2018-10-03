@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/about_this_application"
                 android:textSize="25sp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorPrimary"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="20dp"/>
 
@@ -43,7 +43,7 @@
                 android:textSize="20sp"
                 android:layout_centerHorizontal="true"
                 android:textColor="@android:color/black"
-                android:text="Version 0.5 September 2018\n\nDesigned and written by Yannick Spörl \n\nFeel free to contact me for bug-reports or other feedback or to take a look at the source-code at github.com/yannickspoerl/speedcubingtimer"/>
+                android:text="Version 0.6 September 2018\n\nDesigned and written by Yannick Spörl \n\nFeel free to contact me for bug-reports or other feedback or to take a look at the source-code at github.com/yannickspoerl/speedcubingtimer"/>
 
         </RelativeLayout>
 

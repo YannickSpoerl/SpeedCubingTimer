@@ -10,8 +10,10 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,7 +27,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class Timer extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class Timer extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     boolean inspectionEnabled;
     boolean timerVisible;
@@ -35,7 +37,6 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
     private long inspectionTimeLeft = 15000;
     private long startTime = 0L, timeInMilliseconds = 0L, timeSwapBuff = 0L, updateTime = 0L;
     private long finalMinutes = 0L, finalSeconds = 0L, finalMilliseconds = 0L;
-
     private CountDownTimer inspectionCountDownTimer;
     private Database database;
     private Button startStopButton;
@@ -67,7 +68,6 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
-
         startStopButton = (Button) findViewById(R.id.startstopbutton);
         messageTextView = (TextView) findViewById(R.id.status_textview);
         Spinner puzzleSpinner = (Spinner) findViewById(R.id.puzzle_spinner);

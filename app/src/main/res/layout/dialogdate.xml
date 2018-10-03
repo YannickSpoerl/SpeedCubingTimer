@@ -8,7 +8,7 @@
     android:gravity="center">
 
     <NumberPicker
-        android:id="@+id/minutesPicker"
+        android:id="@+id/dayPicker"
         android:layout_width="wrap_content"
         android:layout_margin="10dp"
         android:layout_height="wrap_content"/>
@@ -17,11 +17,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text=":"
+        android:text="."
         android:textColor="@android:color/black" />
 
     <NumberPicker
-        android:id="@+id/secondsPicker"
+        android:id="@+id/monthPicker"
         android:layout_width="wrap_content"
         android:layout_margin="10dp"
         android:layout_height="wrap_content"/>
@@ -29,12 +29,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=":"
+        android:text="."
         android:layout_margin="5dp"
         android:textColor="@android:color/black"/>
 
     <NumberPicker
-        android:id="@+id/millisecondsPicker"
+        android:id="@+id/yearPicker"
         android:layout_width="wrap_content"
         android:layout_margin="10dp"
         android:layout_height="wrap_content"/>

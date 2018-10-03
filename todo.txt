@@ -1,10 +1,8 @@
-bugs
+bugs to fix
 -fab switch color bug
 
-todo
+to do
 -statistics
--create time fab + dialog
--swipe to change activities
 
 future ideas
 -import times
@@ -14,3 +12,7 @@ future ideas
 -multilanguage support
 -custom colors
 -scrambler
+
+known bugs
+-sort by oldest/latest not properly working when times are added manually
+-delete deletes all times with same stats

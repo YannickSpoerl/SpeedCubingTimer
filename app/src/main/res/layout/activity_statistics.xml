@@ -11,21 +11,243 @@
         android:layout_height="match_parent"
         android:id="@+id/relLayout">
 
-        <RelativeLayout
+
+
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/relLayoutMiddle"
-            android:layout_alignParentTop="true">
+            android:layout_marginBottom="50dp">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="224dp"
-                android:text="Coming soon" />
-        </RelativeLayout>
+            <TableRow>
+                <Spinner
+                    android:id="@+id/puzzleStatisticsSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="20sp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:text="Number of Solves:"/>
+                <TextView
+                    android:id="@+id/numberOfSolvesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="0"/>
+
+            </TableRow>
+
+            <TableRow
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:text="Personal Best:"/>
+                <TextView
+                    android:id="@+id/personalBestTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="25sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+            </TableRow>
+
+            <TableRow
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="25sp"
+                    android:text="Average"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"
+                    android:text="Current"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="25sp"
+                    android:textColor="@android:color/black"
+                    android:text="Best"/>
+            </TableRow>
+
+            <TableRow
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:text="Average of 5:"/>
+                <TextView
+                    android:id="@+id/avg5CurrentTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+
+                <TextView
+                    android:id="@+id/avg5BestTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+            </TableRow>
+
+            <TableRow
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:text="Average of 12:"/>
+                <TextView
+                    android:id="@+id/avg12CurrentTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+
+                <TextView
+                    android:id="@+id/avg12BestTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+            </TableRow>
+
+            <TableRow
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:text="Average of 50:"/>
+                <TextView
+                    android:id="@+id/avg50CurrentTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+
+                <TextView
+                    android:id="@+id/avg50BestTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+            </TableRow>
+
+            <TableRow
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:text="Average of 100:"/>
+                <TextView
+                    android:id="@+id/avg100CurrentTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+
+                <TextView
+                    android:id="@+id/avg100BestTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+            </TableRow>
+
+            <TableRow
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:text="Average of 1000:"/>
+                <TextView
+                    android:id="@+id/avg1000CurrentTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+
+                <TextView
+                    android:id="@+id/avg1000BestTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+            </TableRow>
+
+            <TableRow
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:text="Average overall:"/>
+                <TextView
+                    android:id="@+id/overallAvgTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:textSize="25sp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="00:00.000"/>
+
+            </TableRow>
+
+        </TableLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -43,8 +265,6 @@
             </android.support.design.widget.BottomNavigationView>
 
         </RelativeLayout>
-
-
 
     </RelativeLayout>
 

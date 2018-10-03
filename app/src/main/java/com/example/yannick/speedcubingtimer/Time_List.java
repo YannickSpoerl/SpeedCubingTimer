@@ -3,11 +3,14 @@ package com.example.yannick.speedcubingtimer;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.TintableBackgroundView;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,11 +22,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -201,11 +204,19 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
         alertDialog.show();
     }
 
+    public static void setButtonTint(FloatingActionButton button, ColorStateList tint) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            ((TintableBackgroundView) button).setSupportBackgroundTintList(tint);
+        } else {
+            ViewCompat.setBackgroundTintList(button, tint);
+        }
+    }
+
     public void switchFABmode(){
         switch (floatingActionButtonMode){
             case 0:
-                shareFAB.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGrey));
-                deleteFAB.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                setButtonTint(shareFAB,getResources().getColorStateList(R.color.colorGrey));
+                setButtonTint(deleteFAB,getResources().getColorStateList(R.color.colorPrimary));
                 floatingActionButtonMode = 1;
                 Toast.makeText(this, "Tap time to delete",Toast.LENGTH_SHORT).show();
                 break;
@@ -226,7 +237,6 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
-
                 chooseTime(i);
             }
         });
@@ -235,12 +245,10 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
     }
 
     public void chooseTime(final int puzzleType){
-        Toast.makeText(Time_List.this, "clicked: " + puzzleType, Toast.LENGTH_SHORT).show();
         final AlertDialog.Builder addTimeDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog, null);
-        addTimeDialog.setTitle("Add new Time");
-        addTimeDialog.setMessage("Enter a new time");
+        addTimeDialog.setTitle("Enter new time");
         addTimeDialog.setView(dialogView);
         final NumberPicker minutesPicker = (NumberPicker) dialogView.findViewById(R.id.minutesPicker);
         final NumberPicker secondsPicker = (NumberPicker) dialogView.findViewById(R.id.secondsPicker);
@@ -281,23 +289,72 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
     }
 
     public void chooseDate(final int puzzleType, final long minutes, final long seconds, final long milliseconds){
-        Toast.makeText(Time_List.this, "Chosen: " + puzzleType + " " + minutes + " " + seconds+ " " +  milliseconds, Toast.LENGTH_SHORT).show();
-        Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) ;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(Time_List.this,
-                android.R.style.Theme_Holo_Light_Dialog_MinWidth, dateSetListener, year, month, day);
-        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorTransparent)));
-        datePickerDialog.show();
-        dateSetListener = new DatePickerDialog.OnDateSetListener() {
+        final AlertDialog.Builder addTimeDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialogdate, null);
+        addTimeDialog.setTitle("Enter a new date");
+        addTimeDialog.setView(dialogView);
+        final NumberPicker dayPicker = (NumberPicker) dialogView.findViewById(R.id.dayPicker);
+        final NumberPicker monthPicker = (NumberPicker) dialogView.findViewById(R.id.monthPicker);
+        final NumberPicker yearPicker = (NumberPicker) dialogView.findViewById(R.id.yearPicker);
+        dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        dayPicker.setMinValue(1);
+        dayPicker.setWrapSelectorWheel(true);
+        dayPicker.setValue(day);
+        monthPicker.setMaxValue(12);
+        monthPicker.setMinValue(1);
+        monthPicker.setWrapSelectorWheel(true);
+        monthPicker.setValue(month + 1);
+        yearPicker.setMaxValue(year);
+        yearPicker.setMinValue(1974);
+        yearPicker.setWrapSelectorWheel(true);
+        yearPicker.setValue(year);
+        monthPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month++;
-                TimeObject newTime = new TimeObject(minutes, seconds, milliseconds, puzzleType, day, month, year);
-                Toast.makeText(Time_List.this, "Chosen: " + puzzleType + " " + minutes + " " + seconds+ " " +  milliseconds, Toast.LENGTH_SHORT).show();
+            public void onValueChange(NumberPicker numberPicker, int i, int newMonth) {
+                calendar.set(Calendar.MONTH, newMonth -1);
+                dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
             }
-        };
+        });
+        yearPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker numberPicker, int i, int newYear) {
+                calendar.set(Calendar.YEAR, newYear);
+                dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+            }
+        });
+        addTimeDialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                saveTime(puzzleType, minutes, seconds, milliseconds, dayPicker.getValue(), monthPicker.getValue(), yearPicker.getValue());
+            }
+        });
+        addTimeDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(Time_List.this,"No time created", Toast.LENGTH_SHORT).show();
+            }
+        });
+        final AlertDialog alertDialog = addTimeDialog.create();
+        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+            }
+        });
+        alertDialog.show();
+    }
+
+    public void saveTime(int puzzleType, long minutes, long seconds, long milliseconds, int day, int month, int year){
+        TimeObject newTime = new TimeObject(minutes, seconds, milliseconds, puzzleType, day, month, year);
+        database.addData(newTime);
+        Toast.makeText(this,"Time added", Toast.LENGTH_SHORT).show();
+        populateListView();
     }
 
     public void menuClicked(){

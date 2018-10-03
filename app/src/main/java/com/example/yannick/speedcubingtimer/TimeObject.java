@@ -1,5 +1,7 @@
 package com.example.yannick.speedcubingtimer;
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -140,5 +142,9 @@ public class TimeObject {
                 return "3x3 MBLD";
         }
         return "Not a puzzle";
+    }
+
+    public long getTotalDuration(){
+        return this.milliseconds + (this.minutes * 60 * 1000) + (this.seconds * 1000);
     }
 }
