@@ -1,6 +1,69 @@
 <resources>
-    <string name="app_name">Speedcubing Timer</string>
+    <string name="app_name" translatable="false">Speedcubing Timer</string>
     <string name="about_this_application">About this Application</string>
+    <string name="about_application_text">Version 0.7 September 2018  Designed and written by Yannick Spörl   Feel free to contact me for bug-reports or other feedback or to take a look at the source-code at github.com/yannickspoerl/speedcubingtimer</string>
+    <string name="inspection_time_setting">15 sec Inspection</string>
+    <string name="show_time_setting">Show time while timing</string>
+    <string name="reset_all_times">Reset all Times</string>
+    <string name="export_times_as_txt">Export Times as .txt</string>
+    <string name="export_times_as_json">Export Times as .json</string>
+    <string name="number_of_solves">Number of Solves:</string>
+    <string name="personal_best">Personal Best:</string>
+    <string name="_00_00_000" translatable="false">00:00.000</string>
+    <string name="average">Average</string>
+    <string name="current">Current</string>
+    <string name="best">Best</string>
+    <string name="average_of_5" translatable="false">Average of 5:</string>
+    <string name="average_of_12" translatable="false">Average of 12:</string>
+    <string name="average_of_50" translatable="false">Average of 50:</string>
+    <string name="average_of_100" translatable="false">Average of 100:</string>
+    <string name="average_of_1000" translatable="false">Average of 1000:</string>
+    <string name="average_overall" translatable="false">Average overall:</string>
+    <string name="sort_times_by">Sort Times by:</string>
+    <string name="puzzle">Puzzle:</string>
+    <string name="timing_stopped">Timing stopped</string>
+    <string name="new_personal_best_notification">NEW PERSONAL BEST!</string>
+    <string name="time_hidden">Time hidden</string>
+    <string name="timing">Timing</string>
+    <string name="inspecting">Inspecting</string>
+    <string name="dnf">DNF</string>
+    <string name="permission_denied_warning">Permission for writing to external storage not granted. Couldnt save file.</string>
+    <string name="could_not_export_warning">Couldnt export time.</string>
+    <string name="reset_times_question">Reset times?</string>
+    <string name="reset_times_confirmation_question">You are about to reset all saved times\n Are you sure?</string>
+    <string name="yes_reset">Yes, reset</string>
+    <string name="reseted_times">Reseted times</string>
+    <string name="no_dont_reset">No, dont reset</string>
+    <string name="exported_times_downloads">Exported times to Downloads directory</string>
+    <string name="settings">Settings</string>
+    <string name="time_list">Time-List</string>
+    <string name="timer">Timer</string>
+    <string name="statistics">Statistics</string>
+    <string name="about">About</string>
+    <string name="my_personal_best_with">My personal bests with </string>
+    <string name="share_your_time_with">Share your personal bests via:</string>
+    <string name="choose_action">Choose Action</string>
+    <string name="hey_i_want_to_share_this_time">Hey, I want to share this time with you: </string>
+    <string name="share_your_time_with_dialog">Share your time via:</string>
+    <string name="delete_time">Delete Time?</string>
+    <string name="yes_delete">Yes, delete</string>
+    <string name="you_are_about_to_delete">You are about to delete </string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="delete_selected_time">Deleted selected time</string>
+    <string name="no_dont_delete">No, dont delete</string>
+    <string name="choose_puzzle_type">Choose the type of puzzle</string>
+    <string name="enter_new_time">Enter new time</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_time_created">No time created</string>
+    <string name="enter_a_new_date">Enter a new date</string>
+    <string name="time_added">Time added</string>
+
+    <string-array name="options">
+        <item>Share</item>
+        <item>Delete</item>
+        <item>Cancel</item>
+    </string-array>
 
     <string-array name="puzzles">
         <item>3x3</item>

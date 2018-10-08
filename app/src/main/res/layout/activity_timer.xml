@@ -44,7 +44,7 @@
                 android:textColor="@color/colorPrimary"
                 android:layout_alignTop="@+id/puzzle_spinner"
                 android:layout_toRightOf="@+id/puzzle_spinner"
-                android:text="Timing stopped" />
+                android:text="@string/timing_stopped" />
 
         </RelativeLayout>
 

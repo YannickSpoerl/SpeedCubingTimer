@@ -30,15 +30,15 @@ import java.util.ArrayList;
 
 public class Settings extends AppCompatActivity {
 
-    Database database;
-    CheckBox inspectionTimeEnabledCheckBox, timeShownEnabledCheckBox;
-    public static final String INSPECTION_ENABLED = "inspection";
-    public static final String TIME_SHOWN_ENABLED = "time_shown";
+    private Database database;
+    private CheckBox inspectionTimeEnabledCheckBox, timeShownEnabledCheckBox;
+    public static final String INSPECTION_ENABLED = "inspection", TIME_SHOWN_ENABLED = "time_shown";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
         final Button resetAllTimesButton = (Button) findViewById(R.id.resetButton);
         Button exportDataButton = (Button) findViewById(R.id.exportDataButton);
         Button exportDataJSONButton = (Button) findViewById(R.id.exportJSONButton);
@@ -120,59 +120,58 @@ public class Settings extends AppCompatActivity {
                 stringBuilder.append("\n");
                 stringBuilder.append(time.toString());
             }
-            File txtFile = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOWNLOADS), "exportedTimes.txt");
-            try{
-                FileOutputStream fileOutputStream = new FileOutputStream(txtFile);
-                fileOutputStream.write(stringBuilder.toString().getBytes());
-                fileOutputStream.close();
-            } catch(IOException e){
-                Toast.makeText(this,"Couldn't export time.", Toast.LENGTH_SHORT).show();
-            }
-            Toast.makeText(this,"Exported times to Downloads directory", Toast.LENGTH_SHORT).show();
-            return;
+            File txtFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "exportedTimes.txt");
+            saveData(txtFile, stringBuilder.toString());
         }
-        Toast.makeText(this,"Permission for writing to external storage not granted. Couldn't save file.",Toast.LENGTH_SHORT).show();
+    }
+
+    public boolean checkWritingPermission(){
+        boolean permissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        if(!permissionGranted){
+            Toast.makeText(this,R.string.permission_denied_warning,Toast.LENGTH_SHORT).show();
+        }
+        return permissionGranted;
     }
 
     public void exportJSONData() {
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+        if(checkWritingPermission()) {
             ArrayList<TimeObject> timeList = database.getTimeListArray(18, 0);
             JSONArray jsonArray = new JSONArray();
-            for(TimeObject time : timeList){
+            for (TimeObject time : timeList) {
                 try {
                     jsonArray.put(time.getJSON());
-                } catch (JSONException j){
+                } catch (JSONException j) {
                     //ignore lol
                 }
             }
-            File jsonFile = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOWNLOADS), "exportedTimes.json");
+            File jsonFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "exportedTimes.json");
+            saveData(jsonFile, jsonArray.toString());
+        }
+    }
+
+    public void saveData(File file, String data){
             try{
-                FileOutputStream fileOutputStream = new FileOutputStream(jsonFile);
-                fileOutputStream.write(jsonArray.toString().getBytes());
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                fileOutputStream.write(data.getBytes());
                 fileOutputStream.close();
             } catch(IOException e){
-                Toast.makeText(this,"Couldn't export time.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,R.string.could_not_export_warning, Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(this,"Exported times to Downloads directory", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Toast.makeText(this,"Permission for writing to external storage not granted. Couldn't save file.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,R.string.exported_times_downloads, Toast.LENGTH_SHORT).show();
     }
 
     public void resetAllTimes(){
         AlertDialog.Builder deleteAlert = new AlertDialog.Builder(Settings.this);
-        deleteAlert.setTitle("Reset times?");
-        deleteAlert.setMessage("You are about to reset all saved times\n Are you sure?");
-        deleteAlert.setPositiveButton("Yes, reset", new DialogInterface.OnClickListener() {
+        deleteAlert.setTitle(R.string.reset_times_question);
+        deleteAlert.setMessage(R.string.reset_times_confirmation_question);
+        deleteAlert.setPositiveButton(R.string.yes_reset, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 database.resetData();
-                Toast.makeText(Settings.this, "Reseted times", Toast.LENGTH_LONG).show();
+                Toast.makeText(Settings.this, R.string.reseted_times, Toast.LENGTH_LONG).show();
             }
         });
-        deleteAlert.setNegativeButton("No, don't reset", new DialogInterface.OnClickListener() {
+        deleteAlert.setNegativeButton(R.string.no_dont_reset, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }

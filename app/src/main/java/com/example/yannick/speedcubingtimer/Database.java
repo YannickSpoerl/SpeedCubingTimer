@@ -12,31 +12,16 @@ public class Database extends SQLiteOpenHelper {
 
     private static final String TABLE_NAME = "times_table";
     private static final int TABLE_VERSION = 3;
-    static final String COL0 = "puzzle_id";
-    static final String COL1 = "minutes";
-    static final String COL2 = "seconds";
-    static final String COL3 = "milliseconds";
-    static final String COL4 = "day";
-    static final String COL5 = "month";
-    static final String COL6 = "year";
+    private static final String COL0 = "puzzle_id", COL1 = "minutes", COL2 = "seconds", COL3 = "milliseconds", COL4 = "day", COL5 = "month", COL6 = "year";
 
-    public Database(Context context){
+    Database(Context context){
         super(context, TABLE_NAME, null, TABLE_VERSION);
     }
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL0 + " INTEGER, " +
-                COL1 + " INTEGER, " +
-                COL2 + " INTEGER, " +
-                COL3 + " INTEGER, " +
-                COL4 + " INTEGER, " +
-                COL5 + " INTEGER, " +
-                COL6 + " TEXT)";
+        String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " + COL0 + " INTEGER, " + COL1 + " INTEGER, " + COL2 + " INTEGER, " + COL3 + " INTEGER, " + COL4 + " INTEGER, " + COL5 + " INTEGER, " + COL6 + " TEXT)";
         sqLiteDatabase.execSQL(createTable);
     }
-
-
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
@@ -55,13 +40,10 @@ public class Database extends SQLiteOpenHelper {
         contentValues.put(COL5, String.valueOf(time.getMonth()));
         contentValues.put(COL6, String.valueOf(time.getYear()));
         long result = sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
-        if(result == -1){
-            return false;
-        }
-        return true;
+        return result != -1;
     }
 
-    public ArrayList<TimeObject> getTimeListArray(int selectedPuzzleID, int selectedSortBy){
+    ArrayList<TimeObject> getTimeListArray(int selectedPuzzleID, int selectedSortBy){
         ArrayList<TimeObject> timeListArray = new ArrayList<>();
         Cursor cursor = this.getData(selectedPuzzleID, selectedSortBy);
         while(cursor.moveToNext()){

@@ -1,16 +1,10 @@
 package com.example.yannick.speedcubingtimer;
 
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.TintableBackgroundView;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -34,48 +26,15 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
 
     private Database database;
     private ListView timeListListView;
-    private DatePickerDialog.OnDateSetListener dateSetListener;
-    FloatingActionButton menuFAB, shareFAB, deleteFAB, addFAB;
-    Animation fabOpen, fabClose, fabRotateClockwise, fabRotateAnticlockwise;
+    FloatingActionButton addFAB;
     private int selectedPuzzleID;
     private int selectedSortBy = 0; // 0 = latest, 1 = oldest, 2 = fastest, 3 = slowest
-    private int floatingActionButtonMode = 0; // 0 = share, 1 = delete
-    boolean menuFABopen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time__list);
-        menuFAB = (FloatingActionButton) findViewById(R.id.menuFAB);
-        shareFAB = (FloatingActionButton) findViewById(R.id.shareFAB);
-        deleteFAB = (FloatingActionButton) findViewById(R.id.deleteFAB);
-        addFAB = (FloatingActionButton) findViewById(R.id.addFAB);
-        fabOpen = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        fabClose = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-        fabRotateClockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_clockwise);
-        fabRotateAnticlockwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_anticlockwise);
-
-        menuFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                menuClicked();
-            }
-        });
-
-        shareFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               switchFABmode();
-            }
-        });
-
-        deleteFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchFABmode();
-            }
-        });
-
+        addFAB = findViewById(R.id.addFAB);
         addFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,17 +42,17 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
             }
         });
 
-        Spinner puzzleSpinner = (Spinner) findViewById(R.id.puzzle_spinner_list);
+        Spinner puzzleSpinner = findViewById(R.id.puzzle_spinner_list);
         ArrayAdapter<CharSequence> puzzleSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.puzzles_list, android.R.layout.simple_spinner_item);
         puzzleSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         puzzleSpinner.setAdapter(puzzleSpinnerAdapter);
 
-        Spinner sortBySpinner = (Spinner) findViewById(R.id.sortby_spinner);
+        Spinner sortBySpinner = findViewById(R.id.sortby_spinner);
         ArrayAdapter<CharSequence> sortBySpinnerAdapter = ArrayAdapter.createFromResource(this,R.array.sortBySpinnerArray, android.R.layout.simple_spinner_item);
         sortBySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortBySpinner.setAdapter(sortBySpinnerAdapter);
 
-        timeListListView = (ListView) findViewById(R.id.timeList);
+        timeListListView = findViewById(R.id.timeList);
         database = new Database(this);
 
         //Bottom Menu
@@ -137,20 +96,33 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 final TimeObject clickedTime = (TimeObject) adapterView.getItemAtPosition(position);
-                switch (floatingActionButtonMode){
-                    case 0:
-                        shareTime(clickedTime);
-                        break;
-                    case 1:
-                        deleteTime(clickedTime);
-                        break;
-                }
+               deleteShareMenu(clickedTime);
             }
         });
     }
 
     @Override
     public void onBackPressed(){
+    }
+
+    public void deleteShareMenu(final TimeObject time){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.choose_action);
+        builder.setItems(R.array.options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                switch (i){
+                    case 0:
+                        shareTime(time);
+                        break;
+                    case 1:
+                        deleteTime(time);
+                        break;
+                }
+            }
+        });
+        builder.show();
     }
 
     @Override
@@ -172,23 +144,23 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
     public void shareTime(TimeObject clickedTime){
         final Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT,"Hey, I want to share this time with you: " + clickedTime.toString());
-        startActivity(Intent.createChooser(intent, "Share your time via:"));
+        intent.putExtra(Intent.EXTRA_TEXT,getResources().getString(R.string.hey_i_want_to_share_this_time) + clickedTime.toString());
+        startActivity(Intent.createChooser(intent, getResources().getString(R.string.share_your_time_with_dialog)));
     }
 
     public void deleteTime(final TimeObject clickedTime){
         AlertDialog.Builder deleteAlert = new AlertDialog.Builder(Time_List.this);
-        deleteAlert.setTitle("Delete Time?");
-        deleteAlert.setMessage("You are about to delete " + clickedTime.toString() + "\n Are you sure?");
-        deleteAlert.setPositiveButton("Yes, delete", new DialogInterface.OnClickListener() {
+        deleteAlert.setTitle(R.string.delete_time);
+        deleteAlert.setMessage(R.string.you_are_about_to_delete + clickedTime.toString() + "\n" + R.string.are_you_sure);
+        deleteAlert.setPositiveButton(R.string.yes_delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 database.deleteData(clickedTime);
                 populateListView();
-                Toast.makeText(Time_List.this, "Deleted selected time", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Time_List.this, R.string.delete_selected_time, Toast.LENGTH_SHORT).show();
             }
         });
-        deleteAlert.setNegativeButton("No, don't delete", new DialogInterface.OnClickListener() {
+        deleteAlert.setNegativeButton(R.string.no_dont_delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
@@ -204,36 +176,11 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
         alertDialog.show();
     }
 
-    public static void setButtonTint(FloatingActionButton button, ColorStateList tint) {
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
-            ((TintableBackgroundView) button).setSupportBackgroundTintList(tint);
-        } else {
-            ViewCompat.setBackgroundTintList(button, tint);
-        }
-    }
-
-    public void switchFABmode(){
-        switch (floatingActionButtonMode){
-            case 0:
-                setButtonTint(shareFAB,getResources().getColorStateList(R.color.colorGrey));
-                setButtonTint(deleteFAB,getResources().getColorStateList(R.color.colorPrimary));
-                floatingActionButtonMode = 1;
-                Toast.makeText(this, "Tap time to delete",Toast.LENGTH_SHORT).show();
-                break;
-            case 1:
-                shareFAB.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                deleteFAB.setBackgroundColor(ContextCompat.getColor(this, R.color.colorGrey));
-                Toast.makeText(this,"Tap time to share", Toast.LENGTH_SHORT).show();
-                floatingActionButtonMode = 0;
-                break;
-        }
-    }
 
     public void choosePuzzleType(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose the type of puzzle");
-        String[] puzzleTypes = {"3x3", "4x4", "5x5", "2x2", "3x3 BLD", "3x3 OH", "3x3 FM", "3x3 FT", "Megaminx", "Pyraminx", "Square-1", "Clock", "Skewb", "6x6", "7x7", "4x4 BLD", "5x5 BLD", "3x3 MBLD"};
-         builder.setItems(puzzleTypes, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.choose_puzzle_type);
+         builder.setItems(R.array.puzzles, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -241,18 +188,18 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
             }
         });
         builder.show();
-
     }
 
     public void chooseTime(final int puzzleType){
         final AlertDialog.Builder addTimeDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog, null);
-        addTimeDialog.setTitle("Enter new time");
+        addTimeDialog.setTitle(R.string.enter_new_time);
         addTimeDialog.setView(dialogView);
-        final NumberPicker minutesPicker = (NumberPicker) dialogView.findViewById(R.id.minutesPicker);
-        final NumberPicker secondsPicker = (NumberPicker) dialogView.findViewById(R.id.secondsPicker);
-        final NumberPicker millisecondsPicker = (NumberPicker) dialogView.findViewById(R.id.millisecondsPicker);
+        final NumberPicker minutesPicker = dialogView.findViewById(R.id.minutesPicker);
+        final NumberPicker secondsPicker = dialogView.findViewById(R.id.secondsPicker);
+        final NumberPicker millisecondsPicker;
+        millisecondsPicker = (NumberPicker) dialogView.findViewById(R.id.millisecondsPicker);
         minutesPicker.setMaxValue(1339);
         minutesPicker.setMinValue(0);
         minutesPicker.setWrapSelectorWheel(true);
@@ -265,16 +212,16 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
         millisecondsPicker.setMinValue(0);
         millisecondsPicker.setWrapSelectorWheel(true);
         millisecondsPicker.setValue(0);
-        addTimeDialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        addTimeDialog.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 chooseDate(puzzleType, minutesPicker.getValue(), secondsPicker.getValue(), millisecondsPicker.getValue());
             }
         });
-        addTimeDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        addTimeDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(Time_List.this,"No time created", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Time_List.this,R.string.no_time_created, Toast.LENGTH_SHORT).show();
             }
         });
         final AlertDialog alertDialog = addTimeDialog.create();
@@ -296,7 +243,7 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
         final AlertDialog.Builder addTimeDialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialogdate, null);
-        addTimeDialog.setTitle("Enter a new date");
+        addTimeDialog.setTitle(R.string.enter_a_new_date);
         addTimeDialog.setView(dialogView);
         final NumberPicker dayPicker = (NumberPicker) dialogView.findViewById(R.id.dayPicker);
         final NumberPicker monthPicker = (NumberPicker) dialogView.findViewById(R.id.monthPicker);
@@ -327,16 +274,16 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
                 dayPicker.setMaxValue(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
             }
         });
-        addTimeDialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        addTimeDialog.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 saveTime(puzzleType, minutes, seconds, milliseconds, dayPicker.getValue(), monthPicker.getValue(), yearPicker.getValue());
             }
         });
-        addTimeDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        addTimeDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(Time_List.this,"No time created", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Time_List.this,R.string.no_time_created, Toast.LENGTH_SHORT).show();
             }
         });
         final AlertDialog alertDialog = addTimeDialog.create();
@@ -353,29 +300,9 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
     public void saveTime(int puzzleType, long minutes, long seconds, long milliseconds, int day, int month, int year){
         TimeObject newTime = new TimeObject(minutes, seconds, milliseconds, puzzleType, day, month, year);
         database.addData(newTime);
-        Toast.makeText(this,"Time added", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,R.string.time_added, Toast.LENGTH_SHORT).show();
         populateListView();
     }
-
-    public void menuClicked(){
-        if(menuFABopen){
-            shareFAB.startAnimation(fabClose);
-            deleteFAB.startAnimation(fabClose);
-            menuFAB.startAnimation(fabRotateAnticlockwise);
-            shareFAB.setClickable(false);
-            deleteFAB.setClickable(false);
-            menuFABopen = false;
-        }
-        else{
-            shareFAB.startAnimation(fabOpen);
-            deleteFAB.startAnimation(fabOpen);
-            menuFAB.startAnimation(fabRotateClockwise);
-            shareFAB.setClickable(true);
-            deleteFAB.setClickable(true);
-            menuFABopen = true;
-        }
-    }
-
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         // do nothing

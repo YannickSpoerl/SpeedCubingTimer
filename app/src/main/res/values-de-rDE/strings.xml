@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Speedcubing Timer</string>
+    <string name="about_this_application">Über diese App</string>
+    <string name="about_application_text">Version 0.7 September 2018  Designed und programmiert von Yannick Spörl   Bei Bugs oder Feedback, schreibe mir gerne eine Nachricht und/oder werfe einen Blick auf den source-code unter github.com/yannickspoerl/speedcubingtimer</string>
+    <string name="inspection_time_setting">15 sec Inspection</string>
+    <string name="show_time_setting">Zeit während demn Stoppen anzeigen</string>
+    <string name="reset_all_times">Alle Zeiten zurücksetzen</string>
+    <string name="export_times_as_txt">Zeiten als .txt exportieren</string>
+    <string name="export_times_as_json">Zeiten als .json exportieren</string>
+    <string name="number_of_solves">Anzahl der Solves:</string>
+    <string name="personal_best">Persönliche Bestzeit:</string>
+    <string name="_00_00_000">00:00.000</string>
+    <string name="average">Average</string>
+    <string name="current">Aktuell</string>
+    <string name="best">Bestleistung</string>
+    <string name="average_of_5" translatable="false">Average of 5:</string>
+    <string name="average_of_12" translatable="false">Average of 12:</string>
+    <string name="average_of_50" translatable="false">Average of 50:</string>
+    <string name="average_of_100" translatable="false">Average of 100:</string>
+    <string name="average_of_1000" translatable="false">Average of 1000:</string>
+    <string name="average_overall" translatable="false">Average overall:</string>
+    <string name="sort_times_by">Zeiten sortieren nach:</string>
+    <string name="puzzle">Puzzle:</string>
+    <string name="timing_stopped">Zeit gestoppt</string>
+    <string name="new_personal_best_notification">NEUE PB!</string>
+    <string name="time_hidden">Zeit versteckt</string>
+    <string name="timing">Zeit läuft</string>
+    <string name="inspecting">Inspection</string>
+    <string name="dnf">DNF</string>
+    <string name="permission_denied_warning">Fehlende Berechtigung zum Lesen und Schreiben des Speichers. Datei konnte nicht erzeugt werden.</string>
+    <string name="could_not_export_warning">Zeiten konnten nicht exportiert werden</string>
+    <string name="reset_times_question">Alle Zeiten zurücksetzen?</string>
+    <string name="reset_times_confirmation_question">Es werden alle Zeiten zurückgesetzt.\n Fortsetzen?</string>
+    <string name="yes_reset">Ja, zurücksetzen</string>
+    <string name="reseted_times">Zeiten zurückgesetzt</string>
+    <string name="no_dont_reset">Nein, nicht zurücksetzen</string>
+    <string name="exported_times_downloads">Zeiten in den Downloads Ordner exportiert</string>
+    <string name="settings">Einstellungen</string>
+    <string name="time_list">All Zeiten</string>
+    <string name="timer">Timer</string>
+    <string name="statistics">Statistik</string>
+    <string name="about">Über die App</string>
+    <string name="my_personal_best_with">Meine persönlichen Rekorde mit </string>
+    <string name="share_your_time_with">Teile deine Rekorde via</string>
+    <string name="choose_action">Wähle eine Aktion</string>
+    <string name="hey_i_want_to_share_this_time">Hey, ich möchte dir diese Zeit zeigen: </string>
+    <string name="share_your_time_with_dialog">Teile deine Zeit via:</string>
+    <string name="delete_time">Zeit löschen?</string>
+    <string name="yes_delete">Ja, löschen</string>
+    <string name="you_are_about_to_delete">Du bist im Begriff zu löschen: </string>
+    <string name="are_you_sure">Bist du sicher?</string>
+    <string name="delete_selected_time">Ausgewählte Zeit gelöscht</string>
+    <string name="no_dont_delete">Nein, nicht löschen</string>
+    <string name="choose_puzzle_type">Wähle Arte des Puzzles</string>
+    <string name="enter_new_time">Gebe neue Zeit ein</string>
+    <string name="done">Fertig</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="no_time_created">Keine neue Zeit erzeugt</string>
+    <string name="enter_a_new_date">Gebe ein neues Datum ein</string>
+    <string name="time_added">Zeit hinzugefügt</string>
+
+
+    <string-array name="sortBySpinnerArray">
+        <item>neueste</item>
+        <item>älteste</item>
+        <item>schnellste</item>
+        <item>langsamste</item>
+    </string-array>
+</resources>

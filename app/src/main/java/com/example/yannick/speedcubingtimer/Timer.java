@@ -1,6 +1,7 @@
 package com.example.yannick.speedcubingtimer;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,9 +12,11 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -21,22 +24,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Set;
 
 public class Timer extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-    boolean inspectionEnabled;
-    boolean timerVisible;
+    private boolean inspectionEnabled, timerVisible, timerRunning = false, inspectionRunning = false;
     private int selectedpuzzleID = 0;
-    boolean timerRunning = false;
-    boolean inspectionRunning = false;
-    private long inspectionTimeLeft = 15000;
-    private long startTime = 0L, timeInMilliseconds = 0L, timeSwapBuff = 0L, updateTime = 0L;
-    private long finalMinutes = 0L, finalSeconds = 0L, finalMilliseconds = 0L;
+    private long inspectionTimeLeft = 15000, startTime = 0L, timeInMilliseconds = 0L, timeSwapBuff = 0L, updateTime = 0L, finalMinutes = 0L, finalSeconds = 0L, finalMilliseconds = 0L, personalBest = 0L;
     private CountDownTimer inspectionCountDownTimer;
     private Database database;
     private Button startStopButton;
@@ -72,10 +74,10 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         messageTextView = (TextView) findViewById(R.id.status_textview);
         Spinner puzzleSpinner = (Spinner) findViewById(R.id.puzzle_spinner);
         database = new Database(this);
+        loadSettings();
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.puzzles, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         puzzleSpinner.setAdapter(adapter);
-
         //Bottom Menu
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavView_Bar);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -136,9 +138,6 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         });
 
         puzzleSpinner.setOnItemSelectedListener(this);
-
-        loadSettings();
-
     }
 
     public void startInspection(){
@@ -156,15 +155,15 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
             }
             @Override
             public void onFinish() {
-                startStopButton.setText("DNF");
+                startStopButton.setText(R.string.dnf);
                 timerRunning = false;
                 inspectionRunning = false;
-                messageTextView.setText("Timing Stopped");
+                messageTextView.setText(R.string.timing_stopped);
 
             }
         }.start();
         startStopButton.setTextColor(Color.RED);
-        messageTextView.setText("Inspecting");
+        messageTextView.setText(R.string.inspecting);
 
     }
 
@@ -185,10 +184,10 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         timeHandler.postDelayed(updateTimerThread,0);
 
         if(!timerVisible) {
-            startStopButton.setText("Time hidden");
+            startStopButton.setText(R.string.time_hidden);
         }
         startStopButton.setTextColor(Color.BLACK);
-        messageTextView.setText("Timing");
+        messageTextView.setText(R.string.timing);
 
     }
 
@@ -204,7 +203,11 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         TimeObject newTime = new TimeObject(finalMinutes, finalSeconds, finalMilliseconds,selectedpuzzleID,
                 c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH)+1, c.get(Calendar.YEAR));
         saveTime(newTime);
-        messageTextView.setText("Timing stopped");
+        messageTextView.setText(R.string.timing_stopped);
+        if(personalBest == 0|| newTime.getTotalDuration() < personalBest){
+            messageTextView.setText(R.string.new_personal_best_notification);
+            personalBest = newTime.getTotalDuration();
+        }
     }
 
     public void saveTime(TimeObject newTime){
@@ -218,6 +221,10 @@ public class Timer extends AppCompatActivity implements AdapterView.OnItemSelect
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         inspectionEnabled = sharedPreferences.getBoolean(Settings.INSPECTION_ENABLED, true);
         timerVisible = sharedPreferences.getBoolean(Settings.TIME_SHOWN_ENABLED, true);
+        ArrayList<TimeObject> currentTimes = database.getTimeListArray(selectedpuzzleID, 0);
+        if(currentTimes.size() >= 1) {
+            personalBest = Statistics.findFastestTime(currentTimes);
+        }
     }
 
     @Override

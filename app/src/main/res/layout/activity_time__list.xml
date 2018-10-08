@@ -20,7 +20,7 @@
                 android:id="@+id/puzzle_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Puzzle:"
+                android:text="@string/puzzle"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="5dp"
@@ -38,7 +38,7 @@
                 android:id="@+id/sortby_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sort Times by:"
+                android:text="@string/sort_times_by"
                 android:layout_toLeftOf="@+id/sortby_spinner"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"/>
@@ -76,47 +76,6 @@
                 app:borderWidth="0dp"
                 android:layout_alignParentBottom="true"
                 android:src="@drawable/ic_add_white_24dp">
-            </android.support.design.widget.FloatingActionButton>
-
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_above="@+id/shareFAB"
-                android:visibility="invisible"
-                android:id="@+id/deleteFAB"
-                android:backgroundTint="@color/colorGrey"
-                app:borderWidth="0dp"
-                android:src="@drawable/ic_delete_white_24dp">
-            </android.support.design.widget.FloatingActionButton>
-
-            <android.support.design.widget.FloatingActionButton
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/menuFAB"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="20dp"
-                android:layout_alignParentRight="true"
-                android:id="@+id/shareFAB"
-                android:backgroundTint="@color/colorPrimary"
-                app:borderWidth="0dp"
-                android:src="@drawable/ic_share_white_24dp">
-            </android.support.design.widget.FloatingActionButton>
-
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:id="@+id/menuFAB"
-                android:backgroundTint="@color/colorPrimary"
-                app:borderWidth="0dp"
-                android:src="@drawable/ic_more_vert_white_24dp">
             </android.support.design.widget.FloatingActionButton>
 
 

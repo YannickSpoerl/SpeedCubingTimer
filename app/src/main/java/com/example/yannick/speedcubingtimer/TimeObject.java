@@ -1,17 +1,14 @@
 package com.example.yannick.speedcubingtimer;
 
-import android.support.annotation.NonNull;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TimeObject {
 
     private long minutes, seconds, milliseconds;
-    private int day, month, year;
-    private int puzzleID;
+    private int day, month, year, puzzleID;
 
-    public TimeObject(long minutes, long seconds, long milliseconds, int puzzleID, int day, int month, int year){
+    TimeObject(long minutes, long seconds, long milliseconds, int puzzleID, int day, int month, int year){
         this.day = day;
         this.milliseconds = milliseconds;
         this.minutes = minutes;
@@ -54,39 +51,39 @@ public class TimeObject {
         return this.getPuzzleString() + ", " + time_string + " from " + date_string;
     }
 
-    public long getMinutes() {
+    long getMinutes() {
         return minutes;
     }
 
-    public long getSeconds() {
+    long getSeconds() {
         return seconds;
     }
 
-    public long getMilliseconds() {
+    long getMilliseconds() {
         return milliseconds;
     }
 
-    public int getDay() {
+    int getDay() {
         return day;
     }
 
-    public int getMonth() {
+    int getMonth() {
         return month;
     }
 
-    public int getYear() {
+    int getYear() {
         return year;
     }
 
-    public int getPuzzleID() {
+    int getPuzzleID() {
         return puzzleID;
     }
 
-    public String getPuzzleString(){
+    String getPuzzleString(){
         return getPuzzleByID(this.puzzleID);
     }
 
-    public JSONObject getJSON() throws JSONException {
+    JSONObject getJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("puzzletype",this.getPuzzleString());
         JSONObject jsonObjectTime = new JSONObject();
@@ -144,7 +141,7 @@ public class TimeObject {
         return "Not a puzzle";
     }
 
-    public long getTotalDuration(){
+    long getTotalDuration(){
         return this.milliseconds + (this.minutes * 60 * 1000) + (this.seconds * 1000);
     }
 }
