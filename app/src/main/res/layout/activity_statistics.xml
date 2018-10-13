@@ -62,15 +62,19 @@
             </TableRow>
 
             <TableRow
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:weightSum="100">
                 <TextView
+                    android:layout_weight="33.3"
                     android:layout_width="wrap_content"
+                    android:gravity="end"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:textColor="@android:color/black"
                     android:textSize="25sp"
                     android:text="@string/average"/>
                 <TextView
+                    android:layout_weight="33.3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -79,6 +83,7 @@
                     android:text="@string/current"/>
 
                 <TextView
+                    android:layout_weight="33.3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -88,15 +93,19 @@
             </TableRow>
 
             <TableRow
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:weightSum="100">
                 <TextView
+                    android:layout_weight="33.3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end"
                     android:layout_margin="5dp"
                     android:textColor="@android:color/black"
                     android:textSize="15sp"
                     android:text="@string/average_of_5"/>
                 <TextView
+                    android:layout_weight="33.3"
                     android:id="@+id/avg5CurrentTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,6 +115,7 @@
                     android:text="@string/_00_00_000"/>
 
                 <TextView
+                    android:layout_weight="33.3"
                     android:id="@+id/avg5BestTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,8 +126,11 @@
             </TableRow>
 
             <TableRow
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:weightSum="100">
                 <TextView
+                    android:layout_weight="33.3"
+                    android:gravity="end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -125,6 +138,7 @@
                     android:textSize="15sp"
                     android:text="@string/average_of_12"/>
                 <TextView
+                    android:layout_weight="33.3"
                     android:id="@+id/avg12CurrentTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -134,6 +148,7 @@
                     android:text="@string/_00_00_000"/>
 
                 <TextView
+                    android:layout_weight="33.3"
                     android:id="@+id/avg12BestTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -144,8 +159,11 @@
             </TableRow>
 
             <TableRow
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:weightSum="100">
                 <TextView
+                    android:layout_weight="33.3"
+                    android:gravity="end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -153,6 +171,7 @@
                     android:textSize="15sp"
                     android:text="@string/average_of_50"/>
                 <TextView
+                    android:layout_weight="33.3"
                     android:id="@+id/avg50CurrentTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -162,6 +181,7 @@
                     android:text="@string/_00_00_000"/>
 
                 <TextView
+                    android:layout_weight="33.3"
                     android:id="@+id/avg50BestTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -172,8 +192,11 @@
             </TableRow>
 
             <TableRow
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:weightSum="100">
                 <TextView
+                    android:layout_weight="33.3"
+                    android:gravity="end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -181,6 +204,7 @@
                     android:textSize="15sp"
                     android:text="@string/average_of_100"/>
                 <TextView
+                    android:layout_weight="33.3"
                     android:id="@+id/avg100CurrentTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -190,6 +214,7 @@
                     android:text="@string/_00_00_000"/>
 
                 <TextView
+                    android:layout_weight="33.3"
                     android:id="@+id/avg100BestTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -200,15 +225,19 @@
             </TableRow>
 
             <TableRow
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:weightSum="100">
                 <TextView
+                    android:layout_weight="33.3"
                     android:layout_width="wrap_content"
+                    android:gravity="end"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:textColor="@android:color/black"
                     android:textSize="15sp"
                     android:text="@string/average_of_1000"/>
                 <TextView
+                    android:layout_weight="33.3"
                     android:id="@+id/avg1000CurrentTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -218,6 +247,7 @@
                     android:text="@string/_00_00_000"/>
 
                 <TextView
+                    android:layout_weight="33.3"
                     android:id="@+id/avg1000BestTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -246,6 +276,12 @@
                     android:text="@string/_00_00_000"/>
 
             </TableRow>
+
+
+                <com.jjoe64.graphview.GraphView
+                    android:id="@+id/graph"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"/>
 
         </TableLayout>
 

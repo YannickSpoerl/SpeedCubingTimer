@@ -151,7 +151,7 @@ public class Time_List extends AppCompatActivity implements AdapterView.OnItemSe
     public void deleteTime(final TimeObject clickedTime){
         AlertDialog.Builder deleteAlert = new AlertDialog.Builder(Time_List.this);
         deleteAlert.setTitle(R.string.delete_time);
-        deleteAlert.setMessage(R.string.you_are_about_to_delete + clickedTime.toString() + "\n" + R.string.are_you_sure);
+        deleteAlert.setMessage(getResources().getString(R.string.you_are_about_to_delete) + clickedTime.toString() + "\n" + getResources().getString(R.string.are_you_sure));
         deleteAlert.setPositiveButton(R.string.yes_delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

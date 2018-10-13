@@ -16,15 +16,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/puzzle_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/puzzle"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"/>
 
             <Spinner
                 android:id="@+id/puzzle_spinner_list"
@@ -32,15 +23,6 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/puzzle_tv"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"/>
-
-            <TextView
-                android:id="@+id/sortby_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sort_times_by"
-                android:layout_toLeftOf="@+id/sortby_spinner"
-                android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"/>
 
             <Spinner
@@ -68,9 +50,9 @@
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
                 android:id="@+id/addFAB"
                 android:backgroundTint="@color/colorPrimary"
                 app:borderWidth="0dp"

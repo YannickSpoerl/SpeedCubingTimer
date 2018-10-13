@@ -15,6 +15,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import java.util.ArrayList;
 
 public class Statistics extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -23,6 +27,7 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
     int selectedPuzzle = 0, numberOfTimes = 0;
     TextView personalBest, avg5Current, avg5Best, avg12Current, avg12Best, avg50Current, avg50Best, avg100Current, avg100Best, avg1000Current, avg1000Best, overallAvg, numberOfSolves;
     FloatingActionButton shareFloatingActionButton;
+    GraphView graph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,7 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
         numberOfSolves = (TextView) findViewById(R.id.numberOfSolvesTextView);
         Spinner puzzleSpinner = (Spinner) findViewById(R.id.puzzleStatisticsSpinner);
         database = new Database(this);
+        graph = findViewById(R.id.graph);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.puzzles, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         puzzleSpinner.setAdapter(adapter);
@@ -83,6 +89,30 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
         });
     }
 
+    public void plotGraph(){
+        ArrayList<TimeObject> times = database.getTimeListArray(selectedPuzzle, 1);
+        graph.removeAllSeries();
+        LineGraphSeries<DataPoint> averageData = new LineGraphSeries<DataPoint>();
+        averageData.setColor(getResources().getColor(R.color.colorRed));
+        double x = -1;
+        double y;
+        for(int i  = numberOfTimes; i > 0; i--){
+            x  += 1;
+            y = calculateAverage(times) / 1000;
+            averageData.appendData(new DataPoint(x,y), true, numberOfTimes);
+        }
+        LineGraphSeries<DataPoint> graphData = new LineGraphSeries<DataPoint>();
+        graphData.setColor(getResources().getColor(R.color.colorPrimary));
+        x = -1;
+        for(TimeObject time : times){
+            x += 1;
+            y = time.getTotalDuration() / 1000;
+            graphData.appendData(new DataPoint(x,y), true, numberOfTimes);
+        }
+        graph.addSeries(graphData);
+        graph.addSeries(averageData);
+    }
+
     @Override
     public void onBackPressed(){
     }
@@ -96,7 +126,7 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
     public void shareStatistics(){
         final Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        String sharetext = R.string.my_personal_best_with + TimeObject.getPuzzleByID(selectedPuzzle) + ":";
+        String sharetext = getResources().getString(R.string.my_personal_best_with) + TimeObject.getPuzzleByID(selectedPuzzle) + ":";
         if(numberOfTimes >= 1){
             sharetext += "\nPersonal Best: " + personalBest.getText();
         }
@@ -126,12 +156,7 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
                 bestTime = time;
             }
         }
-        long totalDuration = bestTime.getTotalDuration();
-        long mins = totalDuration / 60000;
-        totalDuration = totalDuration - (mins * 60000);
-        long secs = totalDuration / 1000;
-        totalDuration = totalDuration - (secs * 1000);
-        return totalDuration;
+        return bestTime.getTotalDuration();
     }
 
     public static String millisecondsToString(long milliseconds){
@@ -254,6 +279,7 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
             avg5Best.setText(millisecondsToString(findFastestAverage(currentTimes, 5)));
         }
         numberOfSolves.setText(String.valueOf(numberOfTimes));
+        plotGraph();
     }
 
     public void resetTextViews(){

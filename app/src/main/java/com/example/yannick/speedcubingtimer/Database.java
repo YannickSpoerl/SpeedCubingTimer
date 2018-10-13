@@ -59,6 +59,7 @@ public class Database extends SQLiteOpenHelper {
         return timeListArray;
     }
 
+    // 0 = latest, 1 = oldest, 2 = fastest, 3 = slowest
     Cursor getData(int selectedPuzzleID, int selectedSortBy){
         String orderBy = " ORDER BY ID DESC";
         switch (selectedSortBy){
