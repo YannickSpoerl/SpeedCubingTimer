@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name" translatable="false">Speedcubing Timer</string>
     <string name="about_this_application">About this Application</string>
-    <string name="about_application_text">Version 0.8 September 2018  Designed and written by Yannick Spörl   Feel free to contact me for bug-reports or other feedback or to take a look at the source-code at github.com/yannickspoerl/speedcubingtimer</string>
+    <string name="versionText">Version 0.8 September 2018</string>
+    <string name="contributors">Design, Code: Yannick Spoerl\n GraphView: Jonas Gehring @jjoe64</string>
+    <string name="about_application_text">Feel free to contact me for bug-reports or other feedback or to take a look at the source-code at github.com/yannickspoerl/speedcubingtimer</string>
     <string name="inspection_time_setting">15 sec Inspection</string>
     <string name="show_time_setting">Show time while timing</string>
     <string name="reset_all_times">Reset all Times</string>

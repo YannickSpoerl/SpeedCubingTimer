@@ -43,7 +43,26 @@
                 android:textSize="20sp"
                 android:layout_centerHorizontal="true"
                 android:textColor="@android:color/black"
-                android:text="@string/about_application_text"/>
+                android:text="@string/versionText"/>
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv1"
+                android:layout_margin="20dp"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/black"
+                android:text="@string/contributors" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv2"
+                android:layout_margin="20dp"
+                android:textSize="20sp"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/black"
+                android:text="@string/about_application_text" />
 
         </RelativeLayout>
 
