@@ -2,6 +2,10 @@
 ##### Time your Speedsolves and manage your times!
 Android App by a Speedcuber for Speedcubers! This App is in beta for now, with minor bugs and improvements to come but the application is fully functional already.
 
+**To install the App just download the .apk file and execute it on your android phone.**
+
+<img src="images/timing.jpg" alt="drawing" width="250"/> <img src="images/list.jpg" alt="drawing" width="250"/> <img src="images/statistic.jpg" alt="drawing" width="250"/>
+
 Features are:
 
 - Time solves of all WCA-puzzles
