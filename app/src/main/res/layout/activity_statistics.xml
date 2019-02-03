@@ -14,8 +14,9 @@
 
 
         <TableLayout
+            android:id="@+id/table1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="50dp">
 
             <TableRow>
@@ -60,6 +61,13 @@
                     android:textColor="@color/colorPrimary"
                     android:text="@string/_00_00_000"/>
             </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:layout_below="@+id/table1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp">
 
             <TableRow
                 android:gravity="center_horizontal"
